@@ -1,0 +1,8 @@
+@import "tailwindcss";
+
+html { -webkit-text-size-adjust: 100%; }
+body { background: #f4f7f6; color: #0f172a; font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+* { overflow-wrap: anywhere; }
+@keyframes muncul { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+.muncul { animation: muncul .25s ease-out both; }
+@media (prefers-reduced-motion: reduce) { .muncul { animation: none; } }
