@@ -1,19 +1,23 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { DataProvider, useData } from './data/DataProvider.jsx'
-import { StatusProvider } from './state/StatusPencarian.jsx'
-import { useFavorit } from './lib/favorit.js'
+import { StatusProvider, useStatus } from './state/StatusPencarian.jsx'
 import Cari from './pages/Cari.jsx'
 import Detail from './pages/Detail.jsx'
 import Bandingkan from './pages/Bandingkan.jsx'
 import Favorit from './pages/Favorit.jsx'
+import Beranda from './pages/Beranda.jsx'
+import Navigasi from './components/Navigasi.jsx'
+import { KeadaanGalat, KerangkaHalaman } from './components/Keadaan.jsx'
+import BatasGalat from './components/BatasGalat.jsx'
 
-// Rute memakai hash (#/...) supaya tautan bisa dibuka dari HP tanpa pengaturan server.
 function bacaRute(hash) {
   const bagian = hash.replace(/^#\/?/, '').split('/')
   if (bagian[0] === 'tempat' && /^\d+$/.test(bagian[1] ?? '')) return { halaman: 'detail', id: Number(bagian[1]) }
   if (bagian[0] === 'bandingkan') return { halaman: 'bandingkan', modul: bagian[1] }
   if (bagian[0] === 'favorit') return { halaman: 'favorit' }
-  return { halaman: 'cari' }
+  if (bagian[0] === 'kerja') return { halaman: 'cari', modul: 'CW' }
+  if (bagian[0] === 'tinggal') return { halaman: 'cari', modul: 'LS' }
+  return { halaman: 'beranda' }
 }
 
 function useRute() {
@@ -31,10 +35,26 @@ function useRute() {
   return { rute: bacaRute(hash), kembali }
 }
 
+function SinkronTab({ rute }) {
+  const { tab, setTab } = useStatus()
+  useEffect(() => {
+    if (rute.halaman === 'cari' && rute.modul && rute.modul !== tab) setTab(rute.modul)
+  }, [rute.halaman, rute.modul, tab, setTab])
+  return null
+}
+
 function Isi() {
   const data = useData()
+  const { tab } = useStatus()
   const { rute, kembali } = useRute()
-  const { ids } = useFavorit()
+
+  useEffect(() => {
+    if (rute.halaman === 'detail') return // Detail memasang judulnya sendiri (nama tempat)
+    const judul = { beranda: 'Betah Jogja', favorit: 'Favorit · Betah Jogja', bandingkan: 'Perbandingan · Betah Jogja' }
+    document.title = rute.halaman === 'cari'
+      ? `${rute.modul === 'LS' ? 'Tempat tinggal' : 'Tempat kerja'} · Betah Jogja`
+      : (judul[rute.halaman] ?? 'Betah Jogja')
+  }, [rute.halaman, rute.modul])
 
   useEffect(() => {
     if (rute.halaman !== 'cari') window.scrollTo(0, 0)
@@ -42,36 +62,26 @@ function Isi() {
 
   let konten
   if (data.status === 'memuat') {
-    konten = <p className="rounded-xl bg-white p-6 text-center text-sm text-slate-600 shadow-sm">Memuat data…</p>
+    konten = rute.halaman === 'beranda' ? <Beranda /> : <KerangkaHalaman />
   } else if (data.status === 'galat') {
-    konten = (
-      <div className="space-y-3 rounded-xl border border-rose-200 bg-rose-50 p-4 text-sm text-rose-800">
-        <p className="font-semibold">Data tidak bisa dimuat.</p>
-        <p>{data.pesan}</p>
-        <p>Periksa sambungan internet, variabel lingkungan Supabase, dan kebijakan baca (RLS).</p>
-        <button type="button" onClick={data.muat} className="rounded-lg bg-rose-600 px-3 py-2 font-medium text-white">Coba lagi</button>
-      </div>
-    )
+    konten = <KeadaanGalat pesan={data.pesan} onCoba={data.muat} />
   } else if (rute.halaman === 'detail') konten = <Detail id={rute.id} kembali={kembali} />
   else if (rute.halaman === 'bandingkan') konten = <Bandingkan modul={rute.modul} kembali={kembali} />
   else if (rute.halaman === 'favorit') konten = <Favorit />
-  else konten = <Cari />
-
-  const aktif = (h) => (rute.halaman === h ? 'bg-white/20' : 'hover:bg-white/10')
+  // Bila tab di state belum sama dengan rute, tunggu sinkron dulu supaya tidak ada kilatan tab lama.
+  else if (rute.halaman === 'cari') konten = rute.modul && rute.modul !== tab ? <KerangkaHalaman /> : <Cari />
+  else konten = <Beranda />
 
   return (
-    <div className="mx-auto min-h-screen max-w-2xl px-3 pb-10">
-      <header className="-mx-3 mb-4 bg-gradient-to-r from-teal-700 to-teal-600 px-4 py-4 text-white">
-        <h1 className="text-lg font-bold leading-tight">Tempat Kerja dan Tinggal untuk Freelancer di Yogyakarta</h1>
-        <nav className="mt-3 flex gap-2 text-sm" aria-label="Navigasi utama">
-          <a href="#/" className={`rounded-full px-3 py-1.5 transition ${aktif('cari')}`}>Cari tempat</a>
-          <a href="#/favorit" className={`rounded-full px-3 py-1.5 transition ${aktif('favorit')}`}>Favorit ({ids.length})</a>
-        </nav>
-      </header>
-      <main>{konten}</main>
-      <footer className="mt-8 text-center text-xs text-slate-500">
-        Seluruh data tempat, ulasan, dan foto di aplikasi ini adalah data simulasi untuk keperluan penelitian. v0.1
-      </footer>
+    <div className="min-h-dvh bg-[var(--bg-canvas)] text-[var(--text-main)]">
+      <SinkronTab rute={rute} />
+      <Navigasi rute={rute} />
+      <main
+        className="mx-auto max-w-6xl px-4 pt-6 md:px-6 md:pt-10"
+        style={{ paddingBottom: 'calc(var(--dock-h) + env(safe-area-inset-bottom) + 32px)' }}
+      >
+        <BatasGalat resetKey={window.location.hash}>{konten}</BatasGalat>
+      </main>
     </div>
   )
 }

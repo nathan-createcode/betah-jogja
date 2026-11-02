@@ -1,8 +1,333 @@
 @import "tailwindcss";
 
-html { -webkit-text-size-adjust: 100%; }
-body { background: #f4f7f6; color: #0f172a; font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
-* { overflow-wrap: anywhere; }
-@keyframes muncul { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
-.muncul { animation: muncul .25s ease-out both; }
-@media (prefers-reduced-motion: reduce) { .muncul { animation: none; } }
+:root {
+  /* Modul: biru tinta untuk tempat kerja, hijau daun untuk tempat tinggal. Hanya dipakai untuk data. */
+  --working-primary: #2B3FA0;
+  --working-hover: #1F2F7D;
+  --working-surface: #EEF0FA;
+  --working-border: #CDD3F0;
+  --living-primary: #2D6A4F;
+  --living-hover: #1B4332;
+  --living-surface: #EAF4ED;
+  --living-border: #C3DECC;
+
+  /* Permukaan hangat, satu garis tipis, tanpa bayangan. */
+  --bg-canvas: #FAF8F4;
+  --bg-surface: #FFFFFF;
+  --bg-muted: #F1EEE7;
+  --border-light: #E4DFD4;
+  --border-strong: #CFC9BB;
+  --text-main: #1F1D1A;
+  --text-secondary: #5B574F;
+  --text-muted: #6B665C;
+  --text-on-accent: #FFFFFF;
+  --status-warning: #B45309;
+  --status-galat: #B42318;
+
+  --aksen: var(--text-main);
+  --aksen-hover: #000000;
+  --aksen-surface: var(--bg-muted);
+  --aksen-border: var(--border-light);
+
+  --radius: 12px;
+  --radius-kontrol: 8px;
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --durasi: 160ms;
+  --dock-h: 64px;
+  --header-h: 64px;
+  --tinggi-kontrol: 40px;
+}
+@media (pointer: coarse) {
+  :root { --tinggi-kontrol: 44px; }
+}
+@media (min-width: 768px) {
+  :root { --dock-h: 0px; }
+}
+
+.aksen-cw {
+  --aksen: var(--working-primary);
+  --aksen-hover: var(--working-hover);
+  --aksen-surface: var(--working-surface);
+  --aksen-border: var(--working-border);
+}
+.aksen-ls {
+  --aksen: var(--living-primary);
+  --aksen-hover: var(--living-hover);
+  --aksen-surface: var(--living-surface);
+  --aksen-border: var(--living-border);
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scrollbar-color: var(--border-strong) transparent;
+}
+body {
+  margin: 0;
+  background: var(--bg-canvas);
+  color: var(--text-main);
+  font-family: "Plus Jakarta Sans Variable", "Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.55;
+  overflow-wrap: break-word;
+  caret-color: var(--aksen);
+}
+/* Tanpa jeda tap (double-tap zoom) pada kontrol. */
+button, a, summary, label, input, select, [role="button"] { touch-action: manipulation; }
+/* Input minimal 16px supaya iOS Safari tidak memperbesar halaman saat fokus. */
+input, textarea, select { font-size: 16px; }
+::selection { background: color-mix(in srgb, var(--aksen) 20%, #fff); color: var(--text-main); }
+input[type="checkbox"] { accent-color: var(--aksen); }
+
+h1, h2, h3 {
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  font-weight: 600;
+  text-wrap: balance;
+}
+.angka { font-variant-numeric: tabular-nums; }
+
+.kartu {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius);
+}
+.kartu-interaktif { transition: border-color var(--durasi) var(--ease); }
+@media (hover: hover) and (pointer: fine) {
+  .kartu-interaktif:hover { border-color: var(--border-strong); }
+}
+
+.panel-filter { scrollbar-width: thin; }
+@media (min-width: 1024px) {
+  .panel-filter {
+    max-height: calc(100vh - var(--header-h) - 2rem); /* cadangan browser lama */
+    max-height: calc(100dvh - var(--header-h) - 2rem);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-gutter: stable;
+  }
+}
+
+.tombol-utama {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--tinggi-kontrol);
+  min-width: 44px;
+  padding: 0 16px;
+  border: 1px solid var(--text-main);
+  border-radius: var(--radius-kontrol);
+  background: var(--text-main);
+  color: var(--text-on-accent);
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background var(--durasi) var(--ease), transform var(--durasi) var(--ease);
+}
+@media (hover: hover) and (pointer: fine) { .tombol-utama:hover { background: #3A362F; } }
+.tombol-utama:active { transform: scale(0.98); }
+
+.tombol-terang { background: var(--bg-surface); color: var(--text-main); border-color: var(--bg-surface); }
+@media (hover: hover) and (pointer: fine) { .tombol-terang:hover { background: var(--bg-muted); } }
+
+.tombol-halus {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--tinggi-kontrol);
+  min-width: 44px;
+  padding: 0 12px;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-kontrol);
+  background: var(--bg-surface);
+  color: var(--text-main);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: border-color var(--durasi) var(--ease), background var(--durasi) var(--ease), transform var(--durasi) var(--ease);
+}
+@media (hover: hover) and (pointer: fine) { .tombol-halus:hover { border-color: var(--border-strong); background: var(--bg-canvas); } }
+.tombol-halus:active { transform: scale(0.98); }
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--tinggi-kontrol);
+  padding: 0 12px;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-kontrol);
+  background: var(--bg-surface);
+  color: var(--text-main);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: border-color var(--durasi) var(--ease), background var(--durasi) var(--ease), color var(--durasi) var(--ease), transform var(--durasi) var(--ease);
+}
+@media (hover: hover) and (pointer: fine) { .chip:hover { border-color: var(--border-strong); } }
+.chip[aria-pressed="true"] {
+  border-color: var(--text-main);
+  background: var(--text-main);
+  color: var(--text-on-accent);
+}
+
+.segmen {
+  min-height: var(--tinggi-kontrol);
+  padding: 0 8px;
+  white-space: nowrap;
+  border: 1px solid transparent;
+  border-radius: var(--radius-kontrol);
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background var(--durasi) var(--ease), color var(--durasi) var(--ease), transform var(--durasi) var(--ease);
+}
+.segmen[aria-pressed="true"] {
+  background: var(--bg-surface);
+  border-color: var(--border-light);
+  color: var(--m, var(--text-main));
+  font-weight: 600;
+}
+
+/* Respons tekan (feedback). :active adalah tekanan nyata di layar sentuh, jadi tanpa gating hover. */
+.chip:active, .segmen:active { transform: scale(0.98); }
+.tombol-hati {
+  transition: transform var(--durasi) var(--ease), border-color var(--durasi) var(--ease), color var(--durasi) var(--ease);
+}
+.tombol-hati:active { transform: scale(0.95); }
+@media (hover: hover) and (pointer: fine) { .tombol-hati:hover { border-color: var(--border-strong); } }
+
+/* Bilah "N dipilih": tetap dirender supaya bisa keluar dengan halus. Saat tertutup: inert + aria-hidden (diatur di Cari.jsx). */
+.bilah-banding {
+  left: max(0.75rem, env(safe-area-inset-left, 0px));
+  right: max(0.75rem, env(safe-area-inset-right, 0px));
+  transform: translateY(calc(100% + 24px));
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    transform calc(var(--durasi) * 1.125) var(--ease),
+    opacity calc(var(--durasi) * 1.125) var(--ease),
+    visibility 0s linear calc(var(--durasi) * 1.125);
+}
+.bilah-banding[data-buka="true"] {
+  transform: none;
+  opacity: 1;
+  visibility: visible;
+  transition:
+    transform calc(var(--durasi) * 1.5) var(--ease),
+    opacity calc(var(--durasi) * 1.5) var(--ease),
+    visibility 0s;
+}
+
+.isian {
+  min-height: var(--tinggi-kontrol);
+  min-width: 0;
+  flex: 1;
+  padding: 0 12px;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-kontrol);
+  background: var(--bg-surface);
+  font: inherit;
+  font-size: 16px;
+  color: var(--text-main);
+}
+.isian::placeholder { color: var(--text-muted); }
+.isian[aria-invalid="true"] { border-color: var(--status-galat); }
+
+summary { list-style: none; }
+summary::-webkit-details-marker { display: none; }
+.chevron { transition: transform var(--durasi) var(--ease); }
+.tautan-nav { transition: color var(--durasi) var(--ease); } /* warna aktif/nonaktif berganti saat pindah halaman (diatur inline di Navigasi.jsx) */
+details[open] > summary .chevron { transform: rotate(180deg); }
+
+/* Buka-tutup halus untuk <details class="lipat-halus">. Peningkatan progresif: bila browser belum
+   mendukung ::details-content, aturan ini diabaikan dan isi tetap terbuka langsung seperti biasa. */
+.lipat-halus { interpolate-size: allow-keywords; }
+.lipat-halus::details-content {
+  block-size: 0;
+  opacity: 0;
+  overflow: clip;
+  transition:
+    block-size calc(var(--durasi) * 1.25) var(--ease),
+    opacity calc(var(--durasi) * 1.25) var(--ease),
+    content-visibility calc(var(--durasi) * 1.25) allow-discrete;
+}
+.lipat-halus[open]::details-content { block-size: auto; opacity: 1; }
+
+.fokus-aksen:focus-visible,
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+summary:focus-visible {
+  outline: 2px solid var(--aksen, var(--text-main));
+  outline-offset: 2px;
+}
+
+/* Batang persentase: satu gerakan yang disengaja, mengikuti perubahan filter. */
+/* Batang persentase: satu gerakan yang disengaja, mengikuti perubahan filter.
+   Hanya `transform` yang dianimasikan (komposit saja, tanpa layout); angka persen tetap dari teks. */
+.batang { height: 4px; border-radius: 2px; background: var(--bg-muted); overflow: hidden; }
+.batang > i {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--aksen);
+  transition: transform calc(var(--durasi) * 1.5) var(--ease);
+}
+
+/* Tabel perbandingan */
+.tabel-banding { border-collapse: separate; border-spacing: 0; }
+.tabel-banding th, .tabel-banding td {
+  padding: 12px 16px;
+  text-align: left;
+  vertical-align: top;
+  border-top: 1px solid var(--border-light);
+  background: var(--bg-surface);
+}
+.tabel-banding thead th { border-top: 0; }
+.tabel-banding tr[data-beda="true"] > * { background: var(--aksen-surface); }
+.tabel-banding th[scope="row"], .tabel-banding thead th:first-child {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  font-weight: 500;
+  font-size: 14px;
+  color: var(--text-secondary);
+  min-width: 112px;
+}
+
+.kerangka {
+  position: relative;
+  overflow: hidden;
+  background: var(--bg-muted);
+  border-radius: var(--radius-kontrol);
+}
+/* Kilau digeser dengan transform (komposit saja), bukan background-position (paint, jalan di main thread). */
+.kerangka::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent 0%, #EAE6DB 50%, transparent 100%);
+  transform: translateX(-100%);
+  animation: kerangka 1.2s linear infinite;
+}
+@keyframes kerangka {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(100%); }
+}
+
+
+@media (prefers-reduced-motion: reduce) {
+  .kerangka::after { animation: none; }
+  .kartu-interaktif, .tombol-utama, .tombol-halus, .chip, .segmen, .tombol-hati, .tautan-nav, .batang > i, .chevron { transition: none; }
+  .tombol-utama:active, .tombol-halus:active, .chip:active, .segmen:active, .tombol-hati:active { transform: none; }
+  .bilah-banding, .bilah-banding[data-buka="true"] { transform: none; transition: opacity var(--durasi) var(--ease), visibility 0s linear var(--durasi); }
+  .bilah-banding[data-buka="true"] { transition: opacity var(--durasi) var(--ease), visibility 0s; }
+  /* gentler, bukan nol: isi tetap memudar saat dibuka, tanpa gerak tinggi */
+  .lipat-halus::details-content {
+    transition: opacity var(--durasi) var(--ease), content-visibility var(--durasi) allow-discrete;
+  }
+}

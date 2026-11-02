@@ -1,4 +1,7 @@
-# TRACE.md - Keterlacakan kebutuhan (v0.1, prototype siklus 1)
+# TRACE.md - Keterlacakan kebutuhan (v0.2, prototype siklus 1)
+
+Status: selesai, sebagian, belum.
+Catatan jujur: "selesai" berarti kode ada dan lulus uji unit. Uji peramban v0.2 memakai tampilan baru (beranda, kartu foto, detail) pada lebar sekitar 390 px dan 1440 px. Koneksi ke Supabase sungguhan tetap mengikuti R01. Cadangan versi tampilan lama: tag git `v0.1-berfungsi`.
 
 Status: selesai, sebagian, belum.
 Catatan jujur: "selesai" berarti kode ada dan lulus uji unit dan uji peramban (Chromium 360 px) memakai data CSV simulasi yang dijawab oleh Supabase tiruan. Koneksi ke Supabase sungguhan belum pernah diuji dari lingkungan pengembangan; buktinya `npm run cek` (lihat R01).
@@ -23,3 +26,12 @@ Catatan jujur: "selesai" berarti kode ada dan lulus uji unit dan uji peramban (C
 | N05 | Setiap kebutuhan punya ID | berkas ini | tinjauan manual | selesai |
 | N06 | Bisa dibuka lewat tautan dari HP | rute hash (src/App.jsx) | perlu deploy (README) | sebagian (belum dideploy) |
 | N07 | Status pencarian tiap tab dipertahankan | src/state/StatusPencarian.jsx | uji peramban (pindah tab, kembali dari detail, gulir, Atur ulang) | selesai |
+| R16 | Token desain, ikon garis, foto placeholder | src/index.css, src/components/Ikon.jsx, FotoPlaceholder.jsx | uji peramban (kartu dan detail berlabel Foto simulasi, tanpa unduh gambar) | selesai |
+| R17 | Skor tampil sebagai label, kalimat, dan titik; SAW hanya di panel tertutup | src/lib/teksSkor.js, BarisSkor.jsx, pages/Detail.jsx | uji peramban: tidak ada "3 / 5" di UI utama; SAW/TOPSIS hanya di "Cara hitungnya" | selesai |
+| R18 | Persentase dua desimal koma Indonesia | src/lib/format.js (hanya tampilan) | uji peramban; urutan tetap nilai penuh (unit test kunci uji 1-2) | selesai |
+| R19 | Halaman pembuka Betah Jogja sebagai rute awal | src/pages/Beranda.jsx, src/App.jsx, index.html | buka `#/`; logo kembali ke beranda tanpa menghapus status tab | selesai |
+| R20 | Hasil grid, filter kiri/lembar, kartu sama di favorit dan bandingkan | Cari.jsx, KartuTempat.jsx, Favorit.jsx, Bandingkan.jsx | uji peramban HP dan laptop | selesai |
+| N08 | Kontras teks informatif, target sentuh 44 px, tanpa gulir horizontal 360 px | CSS dan komponen kontrol | uji peramban 360–390 px | selesai (perlu dicek lagi di HP fisik) |
+| N09 | Dock bawah HP tidak menutupi konten, hormati safe area | App.jsx, Navigasi.jsx, index.css `--dock-h` | uji peramban HP: daftar dan bilah bandingkan di atas dock | selesai (perlu dicek lagi di HP fisik) |
+| N10 | Bahasa Indonesia hangat di UI utama, tanpa istilah teknis | halaman dan KartuTempat | tinjauan salinan | selesai |
+| N11 | Navbar/dock kaca; halaman bersama netral, aksen per modul | Navigasi.jsx, kelas `.aksen-cw` / `.aksen-ls` | uji peramban | selesai |

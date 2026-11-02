@@ -3,11 +3,8 @@ import { createClient } from '@supabase/supabase-js'
 const url = import.meta.env.VITE_SUPABASE_URL
 const key = import.meta.env.VITE_SUPABASE_ANON_KEY
 
-if (!url || !key) {
-  throw new Error(
-    'Variabel lingkungan VITE_SUPABASE_URL dan VITE_SUPABASE_ANON_KEY belum diisi. Lihat README.md.'
-  )
-}
+if (!url || !key) console.error('VITE_SUPABASE_URL / VITE_SUPABASE_ANON_KEY belum diisi. Lihat README.md.')
 
 // Hanya kunci anon/publishable (baca saja). Jangan pernah memakai service_role key.
-export const supabase = createClient(url, key)
+// Tidak melempar error saat di-import: DataProvider yang menampilkan pesan galat bila `supabase` bernilai null.
+export const supabase = url && key ? createClient(url, key) : null

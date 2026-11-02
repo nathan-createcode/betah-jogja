@@ -3,7 +3,7 @@ const angka = new Intl.NumberFormat('id-ID')
 export const rupiah = (n) => `Rp ${angka.format(n)}`
 
 export const persen = (n) =>
-  `${new Intl.NumberFormat('id-ID', { minimumFractionDigits: 1, maximumFractionDigits: 1 }).format(n)}%`
+  `${new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(n)}%`
 
 export const desimal4 = (n) =>
   new Intl.NumberFormat('id-ID', { minimumFractionDigits: 4, maximumFractionDigits: 4 }).format(n)

@@ -1,4 +1,5 @@
 import { useFavorit } from '../lib/favorit.js'
+import { Ikon } from './Ikon.jsx'
 
 export default function TombolFavorit({ id, nama }) {
   const { ada, ubah } = useFavorit()
@@ -10,11 +11,10 @@ export default function TombolFavorit({ id, nama }) {
       aria-pressed={aktif}
       aria-label={aktif ? `Hapus ${nama} dari favorit` : `Simpan ${nama} ke favorit`}
       title={aktif ? 'Hapus dari favorit' : 'Simpan ke favorit'}
-      className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full border text-lg transition ${
-        aktif ? 'border-rose-200 bg-rose-50 text-rose-600' : 'border-slate-200 bg-white text-slate-400 hover:text-rose-500'
-      }`}
+      className="tombol-hati flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-[var(--border-light)] bg-[var(--bg-surface)]"
+      style={{ color: aktif ? '#C8102E' : 'var(--text-secondary)' }}
     >
-      {aktif ? '♥' : '♡'}
+      {aktif ? <Ikon.HatiIsi size={20} /> : <Ikon.Hati size={20} />}
     </button>
   )
 }

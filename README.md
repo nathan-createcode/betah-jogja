@@ -1,4 +1,4 @@
-# Rekomendasi Tempat Kerja dan Tinggal untuk Freelancer di Yogyakarta (v0.1)
+# Betah Jogja (v0.2)
 
 Prototype siklus 1 skripsi: *A Decision Support System for Freelancer Workspace and Livingspace Recommendation in Yogyakarta Using SAW and TOPSIS*. Seluruh data tempat, ulasan, dan foto adalah **data simulasi**. Aplikasi ini tanpa login, tanpa pop-up, dan tanpa iklan.
 
@@ -35,7 +35,7 @@ npm run build     # hasil build di folder dist
 **Vercel:** impor repositori, Framework Preset *Vite*, tambahkan dua variabel lingkungan di atas (Settings, Environment Variables), lalu Deploy. **Netlify:** Build command `npm run build`, Publish directory `dist`, tambahkan dua variabel yang sama. Rute memakai hash (`#/...`), jadi tidak perlu aturan pengalihan. Setelah deploy, tautan bisa dibuka dari HP.
 
 ## Ringkasan perilaku
-- Peringkat memakai persentase kecocokan TOPSIS; skor SAW tampil sebagai pembanding di halaman detail.
+- Peringkat memakai persentase kecocokan (tampilan dua desimal). Skor SAW hanya ada di panel tertutup "Cara hitungnya" pada halaman detail.
 - Bobot, tipe, dan skala kriteria dibaca dari tabel `kriteria`; parameter perilaku dari tabel `konfigurasi`.
 - Normalisasi dihitung dari kandidat yang tersisa setelah semua filter. Kriteria yang nilainya sama di semua kandidat dibuang dan bobot sisanya dinormalkan ulang.
 - Status pencarian tiap tab disimpan di sessionStorage (hilang saat peramban ditutup). Favorit disimpan di localStorage perangkat.

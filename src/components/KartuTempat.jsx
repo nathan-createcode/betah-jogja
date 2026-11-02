@@ -1,69 +1,79 @@
 import Lencana from './Lencana.jsx'
 import TombolFavorit from './TombolFavorit.jsx'
+import FotoPlaceholder from './FotoPlaceholder.jsx'
+import BatangPersen from './BatangPersen.jsx'
+import { WifiKartu } from './BarisSkor.jsx'
+import { Ikon } from './Ikon.jsx'
 import { useData } from '../data/DataProvider.jsx'
 import { LABEL_LOKASI, LABEL_TIPE, persen, teksHarga } from '../lib/format.js'
+import { kelasAksen } from '../lib/teksSkor.js'
+import { susunAlasanTempat } from '../lib/alasan.js'
 
-export default function KartuTempat({ item, adaPersen, dipilih, bisaPilih, onPilih, minKandidat }) {
-  const { konfigurasi } = useData()
+// Satu baris peringkat: foto, identitas, lalu angka kecocokan di kolom kanan.
+export default function KartuTempat({
+  item, adaPersen, dipilih, bisaPilih, onPilih, minKandidat, tampilBanding = false, peringkat,
+}) {
+  const { konfigurasi, kriteria } = useData()
   const t = item.tempat
+  const alasan = susunAlasanTempat(t, kriteria?.[t.modul]) || item.alasan
   return (
-    <article className="muncul rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition hover:shadow-md">
-      <div className="flex items-start gap-3">
-        {adaPersen && (
-          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-teal-600 text-sm font-bold text-white" aria-label={`Peringkat ${item.peringkat}`}>
-            {item.peringkat}
-          </div>
+    <article className={`kartu kartu-interaktif ${kelasAksen(t.modul)} grid grid-cols-[112px_1fr] gap-x-4 gap-y-3 p-3 sm:grid-cols-[168px_minmax(0,1fr)_152px] sm:gap-x-5 sm:p-4`}>
+      <a href={`#/tempat/${t.id}`} tabIndex={-1} aria-hidden="true" className="block self-start">
+        <FotoPlaceholder modul={t.modul} tipe={t.tipe_tempat} rasio="4/3" />
+      </a>
+
+      <div className="min-w-0">
+        <div className="flex items-baseline gap-2">
+          {peringkat != null && <span className="angka text-[14px] font-semibold text-[var(--text-muted)]">#{peringkat}</span>}
+          <a href={`#/tempat/${t.id}`} className="line-clamp-3 min-w-0 text-[18px] font-semibold leading-snug text-[var(--text-main)] [overflow-wrap:anywhere]">{t.nama}</a>
+        </div>
+        <p className="mt-1 text-[14px] text-[var(--text-secondary)]">
+          {LABEL_TIPE[t.tipe_tempat] ?? t.tipe_tempat} · {LABEL_LOKASI[t.tipe_lokasi]}
+        </p>
+        <p className="angka mt-2 text-[16px] font-medium text-[var(--text-main)]">{teksHarga(t)}</p>
+        <div className="mt-2"><WifiKartu tempat={t} /></div>
+        {alasan && <p className="mt-2 text-[14px] text-[var(--text-secondary)]">{alasan}</p>}
+        {!adaPersen && minKandidat && (
+          <p className="mt-2 text-[12px] text-[var(--text-secondary)]">
+            Persentase kecocokan baru dihitung bila ada minimal {minKandidat} tempat yang bisa dibandingkan.
+          </p>
         )}
-        <div className="min-w-0 flex-1">
-          <a href={`#/tempat/${t.id}`} className="block text-base font-semibold leading-snug text-slate-900 hover:text-teal-700">
-            {t.nama}
+        <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1">
+          <Lencana warna="simulasi">{konfigurasi.labelSimulasi}</Lencana>
+          <a href={`#/tempat/${t.id}`} className="inline-flex min-h-9 items-center gap-1 text-[14px] font-medium" style={{ color: 'var(--aksen)' }}>
+            Lihat detail <Ikon.Panah size={16} />
           </a>
-          <div className="mt-1.5 flex flex-wrap gap-1.5">
-            <Lencana warna="teal">{LABEL_TIPE[t.tipe_tempat] ?? t.tipe_tempat}</Lencana>
-            <Lencana>{LABEL_LOKASI[t.tipe_lokasi]}</Lencana>
-            {t.tidakAdaWifi && <Lencana warna="merah">Tidak ada Wi-Fi</Lencana>}
-            <Lencana warna="amber">{konfigurasi.labelSimulasi}</Lencana>
-          </div>
         </div>
-        <TombolFavorit id={t.id} nama={t.nama} />
       </div>
 
-      <div className="mt-3 flex items-end justify-between gap-3">
-        <p className="text-sm font-medium text-slate-700">{teksHarga(t)}</p>
-        {adaPersen ? (
-          <div className="text-right">
-            <p className="text-2xl font-bold leading-none text-teal-700">{persen(item.persen)}</p>
-            <p className="text-xs text-slate-500">kecocokan</p>
-          </div>
-        ) : (
-          <p className="text-right text-sm font-medium text-amber-700">Pembanding tidak cukup</p>
-        )}
-      </div>
-
-      {adaPersen && (
-        <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-slate-100" aria-hidden="true">
-          <div className="h-full rounded-full bg-teal-500 transition-all" style={{ width: `${Math.max(2, Math.min(100, item.persen))}%` }} />
+      <div className="col-span-2 flex flex-wrap items-center justify-between gap-x-4 gap-y-2 border-t border-[var(--border-light)] pt-3 sm:col-span-1 sm:flex-col sm:items-end sm:justify-start sm:border-0 sm:pt-0">
+        <div className="min-w-[120px] sm:w-full sm:text-right">
+          {adaPersen ? (
+            <>
+              <p className="angka text-[32px] font-semibold leading-none" style={{ color: 'var(--aksen)' }}>{persen(item.persen)}</p>
+              <p className="mt-1 text-[12px] font-medium text-[var(--text-secondary)]">cocok</p>
+              <BatangPersen nilai={item.persen} className="mt-2" />
+            </>
+          ) : (
+            <p className="text-[14px] font-medium text-[var(--text-secondary)]">Pembanding tidak cukup</p>
+          )}
         </div>
-      )}
-
-      {item.alasan && <p className="mt-2 text-sm text-slate-600">{item.alasan}</p>}
-
-      <div className="mt-3 flex flex-wrap items-center justify-between gap-2 border-t border-slate-100 pt-3">
-        <a href={`#/tempat/${t.id}`} className="text-sm font-medium text-teal-700 hover:underline">Lihat detail →</a>
-        <label className={`flex items-center gap-2 text-sm ${bisaPilih || dipilih ? 'cursor-pointer text-slate-700' : 'text-slate-400'}`}>
-          <input
-            type="checkbox"
-            checked={dipilih}
-            disabled={!bisaPilih && !dipilih}
-            onChange={() => onPilih(t.id)}
-            className="h-4 w-4 accent-teal-600"
-          />
-          Bandingkan
-        </label>
+        <div className="flex items-center gap-2 sm:mt-auto">
+          {tampilBanding && (
+            <label className={`flex min-h-11 cursor-pointer items-center gap-2 text-[14px] ${bisaPilih || dipilih ? 'text-[var(--text-main)]' : 'text-[var(--text-muted)]'}`}>
+              <input
+                type="checkbox"
+                checked={Boolean(dipilih)}
+                disabled={!bisaPilih && !dipilih}
+                onChange={() => onPilih(t.id)}
+                className="h-[18px] w-[18px]"
+              />
+              Bandingkan
+            </label>
+          )}
+          <TombolFavorit id={t.id} nama={t.nama} />
+        </div>
       </div>
-      {!adaPersen && minKandidat && (
-        <p className="mt-2 text-xs text-slate-500">Persentase kecocokan baru dihitung bila ada minimal {minKandidat} tempat yang bisa dibandingkan.</p>
-      )}
     </article>
   )
 }

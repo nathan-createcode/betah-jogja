@@ -1,18 +1,13 @@
 import {
   CHECKLIST, JENIS_TEMPAT, PILIHAN_ANGGARAN, TIPE_LOKASI,
 } from '../lib/pencarian.js'
-import { LABEL_LOKASI, LABEL_TIPE, rupiah } from '../lib/format.js'
+import { LABEL_LOKASI, LABEL_MODUL, LABEL_TIPE, rupiah } from '../lib/format.js'
+import { kelasAksen } from '../lib/teksSkor.js'
+import { Ikon } from './Ikon.jsx'
 
 function Chip({ aktif, onClick, children }) {
   return (
-    <button
-      type="button"
-      onClick={onClick}
-      aria-pressed={aktif}
-      className={`rounded-full border px-3 py-1.5 text-sm transition ${
-        aktif ? 'border-teal-600 bg-teal-600 text-white' : 'border-slate-300 bg-white text-slate-700 hover:border-teal-500'
-      }`}
-    >
+    <button type="button" onClick={onClick} aria-pressed={aktif} className="chip">
       {children}
     </button>
   )
@@ -21,17 +16,40 @@ function Chip({ aktif, onClick, children }) {
 function Bagian({ judul, children }) {
   return (
     <fieldset className="min-w-0">
-      <legend className="mb-2 text-sm font-semibold text-slate-800">{judul}</legend>
+      <legend className="mb-2 text-[14px] font-semibold text-[var(--text-main)]">{judul}</legend>
       {children}
     </fieldset>
   )
 }
 
-export default function FilterPanel({ modul, status, hasil, ubah, onReset }) {
-  const { anggaran, rentang, jumlah } = hasil
+function PilihModul({ modul, onGanti }) {
+  return (
+    <div role="group" aria-label="Pilih jenis tempat" className="grid grid-cols-2 gap-1 rounded-[10px] bg-[var(--bg-muted)] p-1">
+      {['CW', 'LS'].map((m) => (
+        <button
+          key={m}
+          type="button"
+          aria-pressed={modul === m}
+          onClick={() => onGanti?.(m)}
+          className="segmen"
+          style={{ '--m': m === 'LS' ? 'var(--living-primary)' : 'var(--working-primary)' }}
+        >
+          {LABEL_MODUL[m]}
+        </button>
+      ))}
+    </div>
+  )
+}
+
+export default function FilterPanel({
+  modul, status, hasil, ubah, onReset, onGantiModul,
+  varian = 'penuh', onCari, tampilJenis = true, tampilModul = false,
+}) {
+  const { anggaran, rentang } = hasil
   const pilihan = PILIHAN_ANGGARAN[modul]
   const jenisModul = JENIS_TEMPAT[modul]
   const satuan = modul === 'CW' ? 'per kunjungan' : 'per bulan'
+  const kartu = varian === 'kartu'
 
   const gantiCentang = (butir) =>
     ubah({
@@ -40,9 +58,29 @@ export default function FilterPanel({ modul, status, hasil, ubah, onReset }) {
         : [...status.checklist, butir],
     })
 
+  const checklist = (
+    <Bagian judul="Wajib ada">
+      <div className="grid grid-cols-2 gap-x-3">
+        {CHECKLIST[modul].map(([butir, label]) => (
+          <label key={butir} className="flex min-h-[var(--tinggi-kontrol)] cursor-pointer items-center gap-2 text-[14px] text-[var(--text-main)]">
+            <input
+              type="checkbox"
+              checked={status.checklist.includes(butir)}
+              onChange={() => gantiCentang(butir)}
+              className="h-[18px] w-[18px] shrink-0"
+            />
+            {label}
+          </label>
+        ))}
+      </div>
+    </Bagian>
+  )
+
   return (
-    <section aria-label="Filter pencarian" className="space-y-5 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
-      <Bagian judul="Tipe lokasi">
+    <section aria-label="Filter pencarian" className={`${kelasAksen(modul)} space-y-5`}>
+      {(kartu || tampilModul) && <PilihModul modul={modul} onGanti={onGantiModul} />}
+
+      <Bagian judul="Lokasi">
         <div className="flex flex-wrap gap-2">
           <Chip aktif={status.lokasi === 'semua'} onClick={() => ubah({ lokasi: 'semua' })}>Semua</Chip>
           {TIPE_LOKASI.map((l) => (
@@ -59,9 +97,11 @@ export default function FilterPanel({ modul, status, hasil, ubah, onReset }) {
             </Chip>
           ))}
         </div>
-        <label className="mt-3 block text-sm text-slate-700" htmlFor={`anggaran-${modul}`}>atau ketik sendiri (Rupiah {satuan})</label>
+        <label className="mt-3 block text-[14px] text-[var(--text-secondary)]" htmlFor={`anggaran-${modul}`}>
+          atau ketik sendiri (Rupiah {satuan})
+        </label>
         <div className="mt-1 flex items-center gap-2">
-          <span className="text-sm text-slate-500">Rp</span>
+          <span className="text-[14px] text-[var(--text-secondary)]">Rp</span>
           <input
             id={`anggaran-${modul}`}
             type="text"
@@ -75,57 +115,55 @@ export default function FilterPanel({ modul, status, hasil, ubah, onReset }) {
               const v = e.target.value
               ubah(v.trim() === '' ? { anggaran: 'semua', anggaranTeks: '' } : { anggaran: 'ketik', anggaranTeks: v })
             }}
-            className={`min-w-0 flex-1 rounded-lg border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-teal-500 ${
-              anggaran.galat ? 'border-rose-400' : 'border-slate-300'
-            }`}
+            className="isian"
           />
         </div>
         <div id={`bantuan-anggaran-${modul}`}>
           {rentang && (
-            <p className="mt-1 text-xs text-slate-500">
+            <p className="mt-1 text-[12px] text-[var(--text-secondary)]">
               Harga di data kami: {rupiah(rentang.min)} sampai {rupiah(rentang.max)}
             </p>
           )}
-          {anggaran.galat && <p role="alert" className="mt-1 text-sm text-rose-600">{anggaran.galat}</p>}
-          {!anggaran.galat && anggaran.catatan && <p className="mt-1 text-sm text-teal-700">{anggaran.catatan}</p>}
+          {anggaran.galat && <p role="alert" className="mt-1 text-[14px] font-medium" style={{ color: 'var(--status-galat)' }}>{anggaran.galat}</p>}
+          {!anggaran.galat && anggaran.catatan && <p className="mt-1 text-[14px]" style={{ color: 'var(--aksen)' }}>{anggaran.catatan}</p>}
         </div>
       </Bagian>
 
-      <Bagian judul="Wajib ada">
-        <div className="grid grid-cols-2 gap-x-3 gap-y-2">
-          {CHECKLIST[modul].map(([butir, label]) => (
-            <label key={butir} className="flex cursor-pointer items-center gap-2 text-sm text-slate-700">
-              <input
-                type="checkbox"
-                checked={status.checklist.includes(butir)}
-                onChange={() => gantiCentang(butir)}
-                className="h-4 w-4 shrink-0 accent-teal-600"
-              />
-              {label}
-            </label>
-          ))}
-        </div>
-      </Bagian>
+      {kartu ? (
+        <details className="lipat rounded-[10px] border border-[var(--border-light)] px-3">
+          <summary className="flex min-h-11 cursor-pointer items-center justify-between text-[14px] font-semibold">
+            Wajib ada
+            <span className="flex items-center gap-2">
+              {status.checklist.length > 0 && (
+                <span className="angka text-[12px] font-medium" style={{ color: 'var(--aksen)' }}>{status.checklist.length} dipilih</span>
+              )}
+              <Ikon.Bawah size={18} className="chevron" />
+            </span>
+          </summary>
+          <div className="pb-3 pt-1">{checklist}</div>
+        </details>
+      ) : checklist}
 
-      <Bagian judul="Jenis tempat (opsional)">
-        <div className="flex flex-wrap gap-2">
-          <Chip aktif={status.jenis === 'semua'} onClick={() => ubah({ jenis: 'semua' })}>Semua</Chip>
-          {jenisModul.map((j) => (
-            <Chip key={j} aktif={status.jenis === j} onClick={() => ubah({ jenis: j })}>{LABEL_TIPE[j]}</Chip>
-          ))}
-        </div>
-      </Bagian>
+      {tampilJenis && !kartu && (
+        <Bagian judul="Jenis tempat (opsional)">
+          <div className="flex flex-wrap gap-2">
+            <Chip aktif={status.jenis === 'semua'} onClick={() => ubah({ jenis: 'semua' })}>Semua</Chip>
+            {jenisModul.map((j) => (
+              <Chip key={j} aktif={status.jenis === j} onClick={() => ubah({ jenis: j })}>{LABEL_TIPE[j]}</Chip>
+            ))}
+          </div>
+        </Bagian>
+      )}
 
-      <div className="flex items-center justify-between gap-3 border-t border-slate-100 pt-3">
-        <p className="text-sm font-semibold text-teal-800" aria-live="polite">{jumlah} tempat cocok</p>
-        <button
-          type="button"
-          onClick={onReset}
-          className="rounded-lg border border-slate-300 px-3 py-1.5 text-sm text-slate-700 transition hover:bg-slate-50"
-        >
-          Atur ulang
+      {kartu ? (
+        <button type="button" onClick={onCari} className="tombol-utama w-full gap-2">
+          <Ikon.Cari size={18} /> Cari
         </button>
-      </div>
+      ) : (
+        <div className="flex items-center justify-end border-t border-[var(--border-light)] pt-3">
+          <button type="button" onClick={onReset} className="tombol-halus">Atur ulang</button>
+        </div>
+      )}
     </section>
   )
 }
