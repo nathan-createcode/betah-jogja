@@ -38,7 +38,7 @@ export default function Beranda() {
       <section className="grid gap-10 pt-2 md:pt-6 lg:grid-cols-[minmax(0,1fr)_420px] lg:items-start lg:gap-16">
         <div>
           <h1 className="max-w-[16ch] text-[40px] font-semibold leading-[1.05] tracking-[-0.03em] text-[var(--text-main)] md:text-[56px]">
-            Freelancer di Jogja?
+            Freelance di Jogja?
             <span className="block">Cari tempat kerja dan tinggal yang bikin betah.</span>
           </h1>
           <p className="mt-5 max-w-lg text-[18px] text-[var(--text-secondary)]">
