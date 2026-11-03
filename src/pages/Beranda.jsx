@@ -10,9 +10,9 @@ import { LABEL_MODUL } from '../lib/format.js'
 import { kelasAksen } from '../lib/teksSkor.js'
 
 const LANGKAH = [
-  'Pilih tempat kerja atau tinggal dan preferensimu.',
-  'Lihat seberapa cocok tiap tempat.',
-  'Bandingkan dan simpan favorit.',
+  'Pilih mau cari tempat kerja atau tempat tinggal, lalu atur kebutuhanmu: lokasi, anggaran, dan fasilitas yang wajib ada.',
+  'Lihat persentase kecocokan tiap tempat beserta alasan singkatnya.',
+  'Bandingkan sampai tiga tempat, lalu simpan yang kamu suka.',
 ]
 
 export default function Beranda() {
@@ -38,10 +38,11 @@ export default function Beranda() {
       <section className="grid gap-10 pt-2 md:pt-6 lg:grid-cols-[minmax(0,1fr)_420px] lg:items-start lg:gap-16">
         <div>
           <h1 className="max-w-[16ch] text-[40px] font-semibold leading-[1.05] tracking-[-0.03em] text-[var(--text-main)] md:text-[56px]">
-            Tempat kerja dan tinggal yang bikin betah di Yogyakarta
+            Freelancer di Jogja?
+            <span className="block">Cari tempat kerja dan tinggal yang bikin betah.</span>
           </h1>
           <p className="mt-5 max-w-lg text-[18px] text-[var(--text-secondary)]">
-            Temukan kafe, ruang kerja, atau hunian yang cocok dengan cara kamu bekerja, dari kenyamanan sampai harga.
+            Bandingkan kafe, coworking, kos, dan rumah sewa dari hal yang paling terasa saat kerja mandiri: internet, ketenangan, kenyamanan, lokasi, dan harga.
           </p>
           <ol className="mt-8 max-w-lg divide-y divide-[var(--border-light)] border-y border-[var(--border-light)]">
             {LANGKAH.map((teks, i) => (
@@ -102,7 +103,7 @@ export default function Beranda() {
       </section>
 
       <footer className="border-t border-[var(--border-light)] py-8 text-[14px] text-[var(--text-secondary)]">
-        Betah Jogja, prototype penelitian skripsi
+        Betah Jogja, prototype penelitian skripsi untuk membantu freelancer memilih tempat kerja dan tempat tinggal di Yogyakarta.
       </footer>
     </div>
   )
