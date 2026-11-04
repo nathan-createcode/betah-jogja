@@ -35,9 +35,14 @@ npm run build     # hasil build di folder dist
 **Vercel:** impor repositori, Framework Preset *Vite*, tambahkan dua variabel lingkungan di atas (Settings, Environment Variables), lalu Deploy. **Netlify:** Build command `npm run build`, Publish directory `dist`, tambahkan dua variabel yang sama. Rute memakai hash (`#/...`), jadi tidak perlu aturan pengalihan. Setelah deploy, tautan bisa dibuka dari HP.
 
 ## Ringkasan perilaku
-- Peringkat memakai persentase kecocokan (tampilan dua desimal). Skor SAW hanya ada di panel tertutup "Cara hitungnya" pada halaman detail.
+- Layar pertama adalah beranda. Judulnya: "Freelance di Jogja? Cari tempat kerja dan tinggal yang bikin betah."
+- Peringkat memakai persentase kecocokan (tampilan dua desimal, koma Indonesia). Skor SAW hanya ada di panel tertutup "Cara hitungnya" pada halaman detail.
+- Skor kriteria di tampilan utama berupa label, kalimat, dan lima titik. Angka mentah seperti `3 / 5` tidak ditampilkan.
+- Filter pencarian (modul, tipe lokasi, anggaran, Wajib ada, jenis tempat) ada di halaman hasil dan bisa digulir sendiri bila lebih tinggi dari layar. Perilaku filter tidak berubah.
+- Perbandingan 2–3 tempat menampilkan data yang sama dengan halaman detail, untuk tempat kerja dan tempat tinggal.
 - Bobot, tipe, dan skala kriteria dibaca dari tabel `kriteria`; parameter perilaku dari tabel `konfigurasi`.
 - Normalisasi dihitung dari kandidat yang tersisa setelah semua filter. Kriteria yang nilainya sama di semua kandidat dibuang dan bobot sisanya dinormalkan ulang.
 - Status pencarian tiap tab disimpan di sessionStorage (hilang saat peramban ditutup). Favorit disimpan di localStorage perangkat.
+- Bila variabel Supabase kosong, aplikasi tetap terbuka dan menampilkan pesan galat. Permintaan data dibatasi 15 detik. Error saat render ditangkap batas galat (muat ulang atau kembali ke beranda).
 
 Pelacakan kebutuhan: `TRACE.md`. Riwayat versi: `CHANGELOG.md`.

@@ -1,5 +1,17 @@
 # CHANGELOG
 
+## v0.2 (lanjutan, November 2026)
+
+Versi paket tetap `0.2.0`. Mesin SAW-TOPSIS, bobot, dan aturan filter tidak diubah.
+
+- Klien Supabase tidak melempar error saat diimpor bila `VITE_SUPABASE_URL` atau `VITE_SUPABASE_ANON_KEY` kosong. `DataProvider` menampilkan pesan konfigurasi.
+- Pembacaan data dibatasi 15 detik. Bila lewat atau gagal, pengguna melihat pesan ramah dan tombol coba lagi.
+- Batas galat di akar aplikasi dan di area konten: layar tidak kosong, ada muat ulang dan kembali ke beranda. Pindah rute membersihkan galat di area konten.
+- Panel filter di halaman hasil selalu tampil dan bisa digulir sendiri sampai checklist Wajib ada, jenis tempat, dan Atur ulang, di tempat kerja maupun tempat tinggal. Tombol Filter terpisah di judul hasil dihapus.
+- Tabel perbandingan menampilkan data yang sama dengan halaman detail (kecocokan dan alasan, semua kriteria, fasilitas, area, jam atau kecepatan, colokan bila ada, kapasitas, tanggal, sumber). Berlaku untuk tempat kerja dan tempat tinggal. Tata letak kolom tetap.
+- Salinan beranda: judul "Freelance di Jogja?", kalimat pendukung, dan tiga langkah. Judul tab peramban mengikuti halaman. Deskripsi meta dan ikon ditambahkan.
+- Font tampilan memakai Plus Jakarta Sans. Ringkasan filter (`src/lib/ringkasan.js`) dan alasan tampilan (`src/lib/alasan.js`) hanya memengaruhi teks, bukan perhitungan.
+
 ## v0.2 (poles tampilan dan komunikasi)
 
 Cadangan versi sebelumnya: tag git `v0.1-berfungsi`. Mesin SAW-TOPSIS, bobot, filter, dan unit test tidak diubah (54 uji lulus).
@@ -7,7 +19,7 @@ Cadangan versi sebelumnya: tag git `v0.1-berfungsi`. Mesin SAW-TOPSIS, bobot, fi
 - Nama **Betah Jogja** di judul peramban, header, dan halaman pembuka.
 - Token warna, tipografi, radius, dan bayangan sesuai sistem desain; ikon garis; foto placeholder internal berlabel Foto simulasi.
 - Persentase kecocokan tampil dua desimal (koma Indonesia). Skor mentah 1–5 diganti label, kalimat, dan lima titik. Skor SAW hanya di panel tertutup "Cara hitungnya".
-- Beranda sebagai rute awal dengan kartu pencarian. Hasil: filter kiri di desktop, lembar bawah di HP, grid kartu. Dock bawah di HP, bilah atas di desktop.
+- Beranda sebagai rute awal dengan kartu pencarian. Hasil berupa grid kartu. Dock bawah di HP, bilah atas di desktop.
 - Favorit dan perbandingan memakai kartu tempat yang sama. Keadaan kosong, pemuatan kerangka, dan kesalahan memakai pesan ramah.
 
 ## v0.1 (prototype siklus 1)
