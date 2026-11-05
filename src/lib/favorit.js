@@ -1,5 +1,6 @@
 // Favorit disimpan di perangkat pengguna (localStorage), hanya berisi id tempat.
 import { useSyncExternalStore } from 'react'
+import { catat } from './catat.js'
 
 const KUNCI = 'dss.favorit.v1'
 const pendengar = new Set()
@@ -22,7 +23,9 @@ function simpan(baru) {
 }
 
 export function ubahFavorit(id) {
-  simpan(daftar.includes(id) ? daftar.filter((x) => x !== id) : [...daftar, id])
+  const sudah = daftar.includes(id)
+  simpan(sudah ? daftar.filter((x) => x !== id) : [...daftar, id])
+  catat(sudah ? 'favorit_hapus' : 'favorit_tambah', id) // statistik anonim, lihat sql/aktivitas.sql
 }
 
 export function useFavorit() {

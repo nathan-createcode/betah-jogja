@@ -9,6 +9,7 @@ import Beranda from './pages/Beranda.jsx'
 import Navigasi from './components/Navigasi.jsx'
 import { KeadaanGalat, KerangkaHalaman } from './components/Keadaan.jsx'
 import BatasGalat from './components/BatasGalat.jsx'
+import { catatKunjunganSekali } from './lib/catat.js'
 
 function bacaRute(hash) {
   const bagian = hash.replace(/^#\/?/, '').split('/')
@@ -87,6 +88,7 @@ function Isi() {
 }
 
 export default function App() {
+  useEffect(() => { catatKunjunganSekali() }, [])
   return (
     <DataProvider>
       <StatusProvider>

@@ -7,6 +7,7 @@ import KartuTempat from '../components/KartuTempat.jsx'
 import { KerangkaHalaman } from '../components/Keadaan.jsx'
 import { Ikon } from '../components/Ikon.jsx'
 import { LABEL_MODUL } from '../lib/format.js'
+import { kodeSesi } from '../lib/catat.js'
 import { kelasAksen } from '../lib/teksSkor.js'
 
 const LANGKAH = [
@@ -104,6 +105,9 @@ export default function Beranda() {
 
       <footer className="border-t border-[var(--border-light)] py-8 text-[14px] text-[var(--text-secondary)]">
         Betah Jogja, prototype penelitian skripsi untuk membantu freelancer memilih tempat kerja dan tempat tinggal di Yogyakarta.
+        <span className="mt-2 block">
+          Situs ini mencatat statistik penggunaan secara anonim, tanpa nama, email, atau lokasi. Kode sesimu: <span className="angka font-semibold text-[var(--text-main)]">{kodeSesi()}</span>
+        </span>
       </footer>
     </div>
   )
