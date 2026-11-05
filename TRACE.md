@@ -14,7 +14,7 @@ Catatan jujur: "selesai" berarti kode ada dan lulus uji unit. Tampilan v0.2 suda
 | R07 | Tanggal pembaruan dan sumber data | src/pages/Detail.jsx, src/pages/Bandingkan.jsx | uji peramban | selesai |
 | R08 | Checklist Wajib ada + penghitung langsung | src/lib/pencarian.js (lolosChecklist), src/lib/fasilitas.js, FilterPanel.jsx | tests/pencarian.test.js (blok checklist); uji peramban | selesai |
 | R09 | Perbandingan 2-3 tempat, data setara halaman detail | src/pages/Bandingkan.jsx | uji peramban (batas 3, CW dan LS, tanpa guliran horizontal) | selesai |
-| R10 | Favorit di perangkat (localStorage) dan halaman favorit | src/lib/favorit.js, src/pages/Favorit.jsx | uji peramban (bertahan setelah muat ulang) | selesai |
+| R10 | Favorit di perangkat (localStorage) dan halaman favorit | src/lib/favorit.js, src/pages/Favorit.jsx | uji peramban (bertahan setelah muat ulang). Perubahan juga mengirim `favorit_tambah` atau `favorit_hapus` bila tabel aktivitas ada | selesai |
 | (Could) | Filter jenis tempat | src/lib/pencarian.js (JENIS_TEMPAT), FilterPanel.jsx | tests/pencarian.test.js | selesai |
 | N01 | Responsif HP dan desktop | seluruh src/ (Tailwind) | uji peramban lebar 360 px: tanpa guliran horizontal di hasil, detail, perbandingan, favorit | selesai (belum dicoba di HP fisik) |
 | N02 | Tanpa pop-up atau iklan | seluruh src/ | uji peramban (tidak ada dialog) | selesai |
@@ -35,3 +35,4 @@ Catatan jujur: "selesai" berarti kode ada dan lulus uji unit. Tampilan v0.2 suda
 | R21 | Layar tidak kosong bila render gagal | src/components/BatasGalat.jsx, src/main.jsx, src/App.jsx | sengaja lempar error di satu halaman: pesan, Muat ulang, dan Ke beranda; pindah rute membersihkan galat area konten | selesai |
 | R22 | Data tidak menggantung; variabel kosong tidak menjatuhkan impor | src/lib/supabase.js, src/data/DataProvider.jsx | tanpa env: pesan konfigurasi. Jaringan lambat: galat setelah 15 detik plus Coba lagi | selesai |
 | N12 | Judul tab mengikuti halaman; ringkasan filter hanya tampilan | src/App.jsx, src/lib/ringkasan.js | pindah beranda, kerja, tinggal, favorit, perbandingan, detail | selesai |
+| R23 | Statistik penggunaan anonim | sql/aktivitas.sql, src/lib/catat.js, src/App.jsx, src/lib/favorit.js, src/pages/Beranda.jsx | `npm test` (tests/catat.test.js); footer beranda menampilkan kode sesi; tanpa tabel aktivitas situs tetap dipakai | selesai |

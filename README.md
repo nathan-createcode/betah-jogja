@@ -30,6 +30,7 @@ npm run build     # hasil build di folder dist
 2. Table Editor, Insert, Import data from CSV, urutan: tempat, ulasan, foto, kriteria, konfigurasi.
 3. SQL Editor: jalankan SQL RLS (aktifkan RLS pada kelima tabel, kebijakan `SELECT` untuk `anon`, cabut INSERT/UPDATE/DELETE) agar pengguna anonim hanya membaca.
 4. Jalankan `npm run cek`; semua baris harus `LULUS`.
+5. Untuk statistik penggunaan: SQL Editor, jalankan `sql/aktivitas.sql` sekali. Tabel ini terpisah. Pengunjung hanya boleh menambah baris; pembacaan hasil dilakukan di SQL Editor (kueri contoh ada di berkas itu). Bila langkah ini dilewati, situs tetap jalan dan pencatatan gagal diam-diam.
 
 ## Cara deploy (gratis)
 **Vercel:** impor repositori, Framework Preset *Vite*, tambahkan dua variabel lingkungan di atas (Settings, Environment Variables), lalu Deploy. **Netlify:** Build command `npm run build`, Publish directory `dist`, tambahkan dua variabel yang sama. Rute memakai hash (`#/...`), jadi tidak perlu aturan pengalihan. Setelah deploy, tautan bisa dibuka dari HP.
@@ -44,5 +45,6 @@ npm run build     # hasil build di folder dist
 - Normalisasi dihitung dari kandidat yang tersisa setelah semua filter. Kriteria yang nilainya sama di semua kandidat dibuang dan bobot sisanya dinormalkan ulang.
 - Status pencarian tiap tab disimpan di sessionStorage (hilang saat peramban ditutup). Favorit disimpan di localStorage perangkat.
 - Bila variabel Supabase kosong, aplikasi tetap terbuka dan menampilkan pesan galat. Permintaan data dibatasi 15 detik. Error saat render ditangkap batas galat (muat ulang atau kembali ke beranda).
+- Penggunaan dicatat secara anonim ke tabel `aktivitas`: satu kunjungan per sesi tab, serta tambah atau hapus favorit. Tidak ada login dan tidak ada data pribadi. Footer beranda menampilkan kode sesi enam karakter. Kegagalan mencatat tidak mengubah perilaku aplikasi.
 
 Pelacakan kebutuhan: `TRACE.md`. Riwayat versi: `CHANGELOG.md`.

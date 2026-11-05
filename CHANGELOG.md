@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## v0.2 (pencatatan penggunaan, 5 November 2026)
+
+Versi paket tetap `0.2.0`. Mesin SAW-TOPSIS, bobot, filter, dan penyimpanan favorit di perangkat tidak diubah.
+
+- Tabel baru `aktivitas` (`sql/aktivitas.sql`), terpisah dari lima tabel data simulasi. Pengunjung anonim hanya boleh menambah baris. Tidak ada kebijakan baca lewat situs.
+- `src/lib/catat.js` mencatat kunjungan sekali per sesi tab, plus tambah atau hapus favorit. Isi catatan: ID acak di perangkat, jenis aksi, id tempat (khusus favorit), rute hash, dan jenis perangkat (lebar di bawah 768 px dihitung mobile). Tidak ada nama, email, IP, atau lokasi.
+- Kegagalan mencatat (jaringan, penyimpanan, atau tabel belum ada) tidak mengganggu pencarian, favorit, atau tampilan.
+- Footer beranda menampilkan kode sesi enam karakter, potongan ID pengunjung, supaya jawaban kuesioner bisa dicocokkan lewat SQL Editor. Uji unit: `tests/catat.test.js`.
+
 ## v0.2 (lanjutan, November 2026)
 
 Versi paket tetap `0.2.0`. Mesin SAW-TOPSIS, bobot, dan aturan filter tidak diubah.
