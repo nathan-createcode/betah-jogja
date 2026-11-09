@@ -37,7 +37,7 @@ export function ambilVisitorId() {
 
 // Kode pendek untuk ditampilkan di footer dan diisi tester di Google Form.
 export function kodeSesi() {
-  return ambilVisitorId().replace(/-/g, '').slice(0, 6).toUpperCase()
+  return ambilVisitorId().replace(/-/g, '').slice(0, 8).toUpperCase()
 }
 
 export function catat(jenis, tempatId = null) {
