@@ -59,6 +59,9 @@
 
 html {
   -webkit-text-size-adjust: 100%;
+  /* Scrollbar vertikal selalu ada, jadi lebar halaman sama di semua tab dan
+     logo serta menu tidak bergeser saat pindah ke halaman yang pendek (Favorit). */
+  overflow-y: scroll;
   scrollbar-color: var(--border-strong) transparent;
 }
 body {
@@ -100,8 +103,11 @@ h1, h2, h3 {
 .panel-filter { scrollbar-width: thin; }
 @media (min-width: 1024px) {
   .panel-filter {
-    max-height: calc(100vh - var(--header-h) - 2rem); /* cadangan browser lama */
-    max-height: calc(100dvh - var(--header-h) - 2rem);
+    /* Tinggi filter hanya bergantung pada layar, tidak pada isi hasil. Sisa 3.5rem
+       (1rem jarak atas + 2.5rem) menjamin filter tidak pernah mentok ke dasar
+       kolom hasil, sehingga tidak ikut terdorong saat hasil di-scroll ke ujung. */
+    max-height: calc(100vh - var(--header-h) - 3.5rem); /* cadangan browser lama */
+    max-height: calc(100dvh - var(--header-h) - 3.5rem);
     overflow-y: auto;
     overscroll-behavior: contain;
     scrollbar-gutter: stable;

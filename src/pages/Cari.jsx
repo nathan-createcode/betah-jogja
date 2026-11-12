@@ -108,7 +108,7 @@ export default function Cari() {
 
   return (
     <div className={`${kelasAksen(tab)} space-y-6 md:space-y-8`}>
-      <div className="lg:grid lg:grid-cols-[304px_minmax(0,1fr)] lg:items-start lg:gap-10">
+      <div className="mb-0 lg:grid lg:min-h-[calc(100dvh-var(--header-h))] lg:grid-cols-[304px_minmax(0,1fr)] lg:items-start lg:gap-10">
         <aside className="panel-filter mb-6 lg:sticky lg:top-[calc(var(--header-h)+1rem)] lg:mb-0">
           <details
             className="kartu lipat lipat-halus"
