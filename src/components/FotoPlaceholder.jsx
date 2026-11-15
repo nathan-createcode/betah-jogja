@@ -102,18 +102,18 @@ const ILUSTRASI = {
   ),
 }
 
-const RASIO = { '4/3': 'aspect-[4/3]', '16/9': 'aspect-video', '21/9': 'aspect-[21/9]' }
+const RASIO = { '4/3': 'aspect-[4/3]', '16/9': 'aspect-video', '21/9': 'aspect-[21/9]', kartu: 'aspect-video sm:aspect-[4/3]' }
 
 export default function FotoPlaceholder({ modul, tipe, rasio = '4/3', className = '' }) {
   return (
     <div
-      className={`${kelasAksen(modul)} ${RASIO[rasio] ?? RASIO['4/3']} relative overflow-hidden rounded-[10px] ${className}`}
+      className={`${kelasAksen(modul)} ${RASIO[rasio] ?? RASIO['4/3']} relative overflow-hidden rounded-[16px] ${className}`}
       style={{ background: 'var(--aksen-surface)', color: 'var(--aksen)' }}
       role="img"
       aria-label="Foto simulasi"
     >
       <div className="absolute inset-x-0 bottom-0" style={{ height: '23.3%', background: 'currentColor', opacity: 0.1 }} aria-hidden="true" />
-      <svg viewBox="0 0 160 120" preserveAspectRatio={rasio === '4/3' ? 'xMidYMid slice' : 'xMidYMax meet'} className="absolute inset-0 h-full w-full" aria-hidden="true">
+      <svg viewBox="0 0 160 120" preserveAspectRatio={rasio === '4/3' || rasio === 'kartu' ? 'xMidYMid slice' : 'xMidYMax meet'} className="absolute inset-0 h-full w-full" aria-hidden="true">
         {ILUSTRASI[tipe] ?? ILUSTRASI.kafe}
       </svg>
       <span className="absolute bottom-1.5 left-1.5 right-1.5 w-fit rounded-md border border-[var(--border-light)] bg-white/90 px-2 py-0.5 text-center text-[12px] font-medium leading-tight text-[var(--text-secondary)]">

@@ -1,14 +1,11 @@
 // Teks tampilan skor kriteria (bukan mesin hitung). Nilai mentah 1-5 tidak ditampilkan di UI utama.
+import { NAMA_KRITERIA } from './format.js'
 
-export const LABEL_KRITERIA_TAMPIL = {
-  kenyamanan_fisik: 'Kenyamanan fisik',
-  kualitas_perawatan: 'Kualitas dan perawatan',
-  ketenangan: 'Ketenangan',
-  internet: 'Internet',
-  lokasi: 'Lokasi dan aksesibilitas',
-  harga: 'Harga',
-  harga_sewa: 'Harga sewa',
-}
+const kapital = (teks) => teks.charAt(0).toUpperCase() + teks.slice(1)
+
+export const LABEL_KRITERIA_TAMPIL = Object.fromEntries(
+  Object.entries(NAMA_KRITERIA).map(([kode, nama]) => [kode, kapital(nama)]),
+)
 
 export const TEKS_SKOR = {
   kenyamanan_fisik: {

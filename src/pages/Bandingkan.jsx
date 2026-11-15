@@ -2,8 +2,9 @@ import { useData } from '../data/DataProvider.jsx'
 import { useStatus } from '../state/StatusPencarian.jsx'
 import { susunHasil } from '../lib/pencarian.js'
 import {
-  LABEL_COLOKAN, LABEL_LOKASI, LABEL_MODUL, LABEL_TIPE, persen, tanggal, teksHarga,
+  LABEL_LOKASI, LABEL_MODUL, LABEL_TIPE, catatanHarga, persen, teksHarga,
 } from '../lib/format.js'
+import { susunInfo, teksPembaruan } from '../lib/infoTempat.js'
 import { kelasAksen, LABEL_KRITERIA_TAMPIL, teksSkor } from '../lib/teksSkor.js'
 import { susunAlasanTempat } from '../lib/alasan.js'
 import BatangPersen from '../components/BatangPersen.jsx'
@@ -56,8 +57,13 @@ function susunBaris({ m, kriteriaModul, itemKartu, adaPersen }) {
   baris.push({
     id: 'harga',
     label: 'Harga',
-    kunci: (t) => teksHarga(t),
-    sel: (t) => <span className="angka text-[16px] font-medium">{teksHarga(t)}</span>,
+    kunci: (t) => `${teksHarga(t)}|${catatanHarga(t) ?? ''}`,
+    sel: (t) => (
+      <div>
+        <span className="angka text-[16px] font-medium">{teksHarga(t)}</span>
+        {catatanHarga(t) && <span className="block text-[14px] text-[var(--text-secondary)]">{catatanHarga(t)}</span>}
+      </div>
+    ),
   })
   for (const k of kriteriaModul.filter((x) => x.tipe !== 'cost')) {
     baris.push({
@@ -85,16 +91,14 @@ function susunBaris({ m, kriteriaModul, itemKartu, adaPersen }) {
   const teks = (id, label, ambil) => baris.push({
     id, label, kunci: (t) => String(ambil(t) ?? ''), sel: (t) => <span className="text-[14px]">{ambil(t) || kosong}</span>,
   })
-  teks('area', 'Area', (t) => t.area_deskripsi)
-  if (cw) {
-    teks('jam', 'Jam', (t) => t.jam_operasional)
-    teks('colokan', 'Colokan', (t) => (t.jumlah_colokan ? (LABEL_COLOKAN[t.jumlah_colokan] ?? t.jumlah_colokan) : null))
-  } else {
-    teks('kecepatan', 'Kecepatan internet', (t) => (t.internet_mbps ? `± ${t.internet_mbps} Mbps (hanya informasi)` : null))
+  teks('area', 'Tentang tempat ini', (t) => t.area_deskripsi)
+  // Label baris sama untuk semua tempat sejenis; satuan ada di dalam nilainya.
+  const labelInfo = cw ? ['jam', 'kapasitas', 'colokan'] : ['kapasitas', 'internet']
+  for (const id of labelInfo) {
+    const contoh = itemKartu.map((i) => susunInfo(i.tempat).find((r) => r.id === id)).find(Boolean)
+    if (contoh) teks(id, contoh.label, (t) => susunInfo(t).find((r) => r.id === id)?.nilai)
   }
-  teks('kapasitas', 'Kapasitas', (t) => (t.kapasitas != null ? `${t.kapasitas} orang` : null))
-  teks('diperbarui', 'Data diperbarui', (t) => (t.tanggal_pembaruan ? tanggal(t.tanggal_pembaruan) : null))
-  teks('sumber', 'Sumber data', (t) => t.sumber_data)
+  teks('diperbarui', 'Sumber dan pembaruan data', (t) => teksPembaruan(t))
   return baris
 }
 
@@ -125,7 +129,7 @@ export default function Bandingkan({ modul, kembali }) {
     <div className={`${kelasAksen(m)} space-y-6`}>
       <button type="button" onClick={kembali} className="tombol-halus gap-1"><Ikon.Kiri size={18} /> Kembali ke hasil</button>
       <div>
-        <h1 className="text-[28px] font-semibold">Perbandingan {LABEL_MODUL[m].toLowerCase()}</h1>
+        <h1 className="text-[32px] font-semibold md:text-[44px]">Perbandingan <em className="sorot" style={{ color: 'var(--aksen)' }}>{LABEL_MODUL[m].toLowerCase()}</em></h1>
         <p className="mt-1 text-[14px] text-[var(--text-secondary)]">
           Baris berlatar warna menandakan nilai yang berbeda antar tempat. Data sama dengan halaman detail.
         </p>

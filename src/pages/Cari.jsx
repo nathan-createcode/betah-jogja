@@ -9,6 +9,8 @@ import FilterPanel from '../components/FilterPanel.jsx'
 import KartuTempat from '../components/KartuTempat.jsx'
 import { KeadaanKosong, KeadaanPembanding } from '../components/Keadaan.jsx'
 import { Ikon } from '../components/Ikon.jsx'
+import PolaBetah from '../components/PolaBetah.jsx'
+import { useGerakDaftar } from '../gerak/useGerakDaftar.js'
 
 // Selaras dengan breakpoint `lg` Tailwind (64rem = 1024px).
 function useLayarLebar() {
@@ -51,6 +53,8 @@ export default function Cari() {
   const { tab, tabs, setTab, ubah, reset } = useStatus()
   const status = tabs[tab]
   useGulirTersimpan(tab)
+  const daftarRef = useRef(null)
+  useGerakDaftar(daftarRef)
 
   const hasil = useMemo(
     () => susunHasil({ modul: tab, tempatModul: tempat[tab], kriteria: kriteria[tab], konfigurasi, status }),
@@ -108,6 +112,37 @@ export default function Cari() {
 
   return (
     <div className={`${kelasAksen(tab)} space-y-6 md:space-y-8`}>
+      <header className="bento isolasi flex flex-wrap items-end justify-between gap-x-8 gap-y-5 p-6 md:p-10" style={{ background: 'var(--aksen-surface)', border: '1px solid var(--aksen-border)' }}>
+        <PolaBetah warna="var(--aksen)" opasitas={0.07} baris={4} />
+        <div className="lapis min-w-0">
+          <p className="label-mono" style={{ color: 'var(--aksen)' }}>(Hasil pencarian)</p>
+          <h1 className="mt-3 text-[32px] font-semibold md:text-[48px]">
+            {LABEL_MODUL[tab].split(' ')[0]} <em className="sorot" style={{ color: 'var(--aksen)' }}>{LABEL_MODUL[tab].split(' ').slice(1).join(' ')}</em>
+          </h1>
+          <p className="mt-2 text-[14px] text-[var(--text-secondary)]">
+            {hasil.status !== 'anggaran_tidak_valid' && (
+              <><span className="angka font-semibold text-[var(--text-main)]" aria-live="polite">{hasil.jumlah} tempat cocok</span> · </>
+            )}
+            diurutkan dari yang paling cocok
+          </p>
+          {hasil.status === 'ok' && (
+            <p className="mt-1 max-w-xl text-[14px] text-[var(--text-secondary)]">
+              Persentase menunjukkan seberapa dekat tiap tempat dengan pilihan terbaik di hasil ini.
+            </p>
+          )}
+        </div>
+        {aktif.length > 0 && (
+          <div className="lapis hidden max-w-md lg:block">
+            <p className="label-mono mb-2 text-[var(--text-secondary)]">(Filter aktif)</p>
+            <ul className="flex flex-wrap gap-1.5">
+              {aktif.map((a) => (
+                <li key={a} className="rounded-full bg-white/70 px-3 py-1 text-[13px] font-medium" style={{ color: 'var(--aksen)' }}>{a}</li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </header>
+
       <div className="mb-0 lg:grid lg:min-h-[calc(100dvh-var(--header-h))] lg:grid-cols-[304px_minmax(0,1fr)] lg:items-start lg:gap-10">
         <aside className="panel-filter mb-6 lg:sticky lg:top-[calc(var(--header-h)+1rem)] lg:mb-0">
           <details
@@ -137,23 +172,8 @@ export default function Cari() {
         </aside>
 
         <div className="min-w-0 space-y-4">
-          <div>
-            <h1 className="text-[28px] font-semibold">{LABEL_MODUL[tab]}</h1>
-            <p className="mt-1 text-[14px] text-[var(--text-secondary)]">
-              {hasil.status !== 'anggaran_tidak_valid' && (
-                <><span className="angka" aria-live="polite">{hasil.jumlah} tempat cocok</span> · </>
-              )}
-              diurutkan dari yang paling cocok
-            </p>
-            {aktif.length > 0 && (
-              <p className="mt-1 hidden text-[14px] text-[var(--text-secondary)] lg:block">
-                <span className="font-medium text-[var(--text-main)]">Filter aktif:</span> {aktif.join(' · ')}
-              </p>
-            )}
-          </div>
-
           {hasil.catatan.filter((c) => c !== 'Semua tempat tercakup').map((c) => (
-            <p key={c} className="flex items-start gap-2 rounded-[10px] border border-[var(--border-light)] bg-[var(--bg-surface)] px-3 py-2 text-[14px] text-[var(--text-secondary)]">
+            <p key={c} className="flex items-start gap-2 rounded-2xl border border-[var(--border-light)] bg-[var(--bg-surface)] px-3 py-2 text-[14px] text-[var(--text-secondary)]">
               <span className="mt-0.5 shrink-0" style={{ color: 'var(--aksen)' }}><Ikon.Info size={16} /></span>
               {c}
             </p>
@@ -173,7 +193,7 @@ export default function Cari() {
 
           {hasil.status === 'pembanding_tidak_cukup' && <KeadaanPembanding />}
 
-          <div className={`space-y-3 ${status.banding.length > 0 ? 'pb-24' : ''}`}>
+          <div ref={daftarRef} className={`space-y-3 ${status.banding.length > 0 ? 'pb-24' : ''}`}>
             {hasil.daftar.map((item, i) => (
               <KartuTempat
                 key={item.tempat.kode}
@@ -194,7 +214,7 @@ export default function Cari() {
       <div
         ref={bilahRef}
         data-buka={bukaBilah ? 'true' : 'false'}
-        className="bilah-banding fixed z-30 mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-2 rounded-xl bg-[var(--text-main)] px-4 py-2 text-[14px] text-white"
+        className="bilah-banding fixed z-30 mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-2 rounded-3xl bg-[var(--text-main)] px-5 py-2 text-[14px] text-white"
         style={{ bottom: 'calc(var(--dock-h) + env(safe-area-inset-bottom, 0px) + 12px)' }}
       >
         <span className="angka">{jumlahBilah} dipilih (maks 3)</span>

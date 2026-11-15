@@ -1,11 +1,13 @@
 import { Ikon } from './Ikon.jsx'
+import PolaBetah from './PolaBetah.jsx'
 
 export function KeadaanKosong({ pesan, tombolRp, onNaikkan }) {
   return (
-    <div className="kartu p-6">
-      <p className="text-[16px] text-[var(--text-main)]">{pesan}</p>
+    <div className="kartu isolasi p-6 md:p-8">
+      <PolaBetah warna="var(--aksen)" opasitas={0.06} baris={5} />
+      <p className="lapis max-w-lg text-[16px] text-[var(--text-main)]">{pesan}</p>
       {tombolRp != null && (
-        <button type="button" onClick={onNaikkan} className="tombol-utama mt-4">
+        <button type="button" onClick={onNaikkan} className="tombol-utama lapis mt-4">
           Naikkan ke Rp {new Intl.NumberFormat('id-ID').format(tombolRp)}
         </button>
       )}

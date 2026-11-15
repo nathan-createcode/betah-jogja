@@ -1,4 +1,5 @@
 import { Ikon } from './Ikon.jsx'
+import Merek from './Merek.jsx'
 import { useFavorit } from '../lib/favorit.js'
 import { useData } from '../data/DataProvider.jsx'
 
@@ -20,10 +21,18 @@ function idAktif(rute) {
 // Lambang: lengkung gapura di dalam kotak tinta.
 function Lambang() {
   return (
-    <svg width="28" height="28" viewBox="0 0 28 28" aria-hidden="true">
-      <rect width="28" height="28" rx="8" fill="var(--text-main)" />
+    <svg width="30" height="30" viewBox="0 0 28 28" aria-hidden="true">
+      <rect width="28" height="28" rx="9" fill="var(--text-main)" />
       <path d="M9 21v-7.5a5 5 0 0 1 10 0V21z" fill="var(--bg-canvas)" />
     </svg>
+  )
+}
+
+function Nama({ kecil = false }) {
+  return (
+    <span className={`font-semibold tracking-[-0.03em] ${kecil ? 'text-[18px]' : 'text-[22px]'}`}>
+      <Merek />
+    </span>
   )
 }
 
@@ -34,9 +43,12 @@ export default function Navigasi({ rute }) {
   // Hanya favorit yang masih ada di data yang dihitung, supaya sama dengan isi halaman Favorit.
   const jumlah = data?.status === 'siap' ? ids.filter((id) => data.tempatById(id)).length : ids.length
 
+  // Warna modul hanya dipakai pada tautan yang menyebut tempat kerja atau tempat tinggal.
+  const warnaAktif = (id) => (id === 'tinggal' ? 'var(--living-primary)' : id === 'kerja' ? 'var(--working-primary)' : 'var(--text-main)')
+
   const item = (t, mobile) => {
     const aktif = aktifNav === t.id
-    const aksen = t.id === 'tinggal' ? 'var(--living-primary)' : t.id === 'kerja' ? 'var(--working-primary)' : 'var(--text-main)'
+    const aksen = warnaAktif(t.id)
     const IkonItem = t.ikon
     const sebutan = t.id === 'favorit' && jumlah > 0 ? `${t.label}, ${jumlah} tempat` : t.label
     if (mobile) {
@@ -44,7 +56,7 @@ export default function Navigasi({ rute }) {
         <a
           key={t.id}
           href={t.href}
-          className="relative flex min-h-14 min-w-0 flex-col items-center justify-center gap-0.5 rounded-lg px-1 py-1"
+          className="relative flex min-h-14 min-w-0 flex-col items-center justify-center gap-0.5 rounded-2xl px-1 py-1"
           style={{ color: aktif ? aksen : 'var(--text-secondary)', fontWeight: aktif ? 600 : 500 }}
           aria-current={aktif ? 'page' : undefined}
           aria-label={sebutan}
@@ -63,11 +75,11 @@ export default function Navigasi({ rute }) {
       <a
         key={t.id}
         href={t.href}
-        className="tautan-nav flex min-h-11 items-center gap-2 px-3 text-[14px]"
+        className="tautan-nav flex min-h-11 items-center gap-2 rounded-full px-4 text-[14px]"
         style={{
-          color: aktif ? 'var(--text-main)' : 'var(--text-secondary)',
+          color: aktif ? '#fff' : 'var(--text-secondary)',
+          background: aktif ? aksen : 'transparent',
           fontWeight: aktif ? 600 : 500,
-          boxShadow: aktif ? 'inset 0 -2px 0 var(--text-main)' : 'none',
         }}
         aria-current={aktif ? 'page' : undefined}
       >
@@ -79,23 +91,23 @@ export default function Navigasi({ rute }) {
 
   return (
     <>
-      <header className="sticky top-0 z-40 hidden border-b border-[var(--border-light)] bg-[var(--bg-canvas)] md:block">
-        <div className="mx-auto flex h-[var(--header-h)] max-w-6xl items-stretch justify-between gap-4 px-6">
-          <a href="#/" className="flex items-center gap-2.5 text-[18px] font-semibold tracking-[-0.02em] text-[var(--text-main)]">
-            <Lambang /> Betah Jogja
+      <header className="sticky top-0 z-40 hidden bg-[color-mix(in_srgb,var(--bg-canvas)_88%,transparent)] backdrop-blur-md md:block">
+        <div className="mx-auto flex h-[var(--header-h)] max-w-6xl items-center justify-between gap-4 px-6">
+          <a href="#/" className="flex items-center gap-2.5 text-[var(--text-main)]" aria-label="Betah Jogja, ke beranda">
+            <Lambang /> <Nama />
           </a>
-          <nav className="flex items-stretch gap-1" aria-label="Navigasi utama">
+          <nav className="flex items-center gap-1 rounded-full border border-[var(--border-light)] bg-[var(--bg-surface)] p-1" aria-label="Navigasi utama">
             {tautan.map((t) => item(t, false))}
           </nav>
         </div>
       </header>
 
-      <div className="sticky top-0 z-40 flex h-14 items-center border-b border-[var(--border-light)] bg-[var(--bg-canvas)] px-4 md:hidden">
-        <a href="#/" className="flex items-center gap-2 text-[16px] font-semibold text-[var(--text-main)]"><Lambang /> Betah Jogja</a>
+      <div className="sticky top-0 z-40 flex h-14 items-center bg-[color-mix(in_srgb,var(--bg-canvas)_88%,transparent)] px-4 backdrop-blur-md md:hidden">
+        <a href="#/" className="flex items-center gap-2 text-[var(--text-main)]" aria-label="Betah Jogja, ke beranda"><Lambang /> <Nama kecil /></a>
       </div>
 
       <nav
-        className="fixed inset-x-0 bottom-0 z-40 border-t border-[var(--border-light)] bg-[var(--bg-canvas)] md:hidden"
+        className="fixed inset-x-0 bottom-0 z-40 rounded-t-[24px] border-t border-[var(--border-light)] bg-[var(--bg-canvas)] md:hidden"
         style={{ paddingBottom: 'env(safe-area-inset-bottom, 0px)', paddingLeft: 'env(safe-area-inset-left, 0px)', paddingRight: 'env(safe-area-inset-right, 0px)' }}
         aria-label="Navigasi utama"
       >

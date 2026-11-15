@@ -175,11 +175,11 @@ describe('tempat tanpa Wi-Fi dan harga 0', () => {
 describe('alasan singkat', () => {
   it('format: dua unggulan dan satu kekurangan, hanya kriteria yang dipakai', () => {
     const h = cari('CW')
-    for (const d of h.daftar) expect(d.alasan).toMatch(/^Unggul di [a-z ]+ dan [a-z ]+\. Kurang di [a-z ]+\.$/)
+    for (const d of h.daftar) expect(d.alasan).toMatch(/^Kelebihan: [a-z ]+ dan [a-z ]+\. Kekurangan: [a-z ]+\.$/)
   })
   it('memakai kontribusi terbesar dan terkecil', () => {
     const k = [{ kode: 'ketenangan', nama: 'K' }, { kode: 'internet', nama: 'I' }, { kode: 'harga', nama: 'H' }, { kode: 'lokasi', nama: 'L' }]
     const dipakai = k.map((x) => ({ kode: x.kode }))
-    expect(susunAlasan({ ketenangan: 0.3, internet: 0.25, harga: 0.01, lokasi: 0.1 }, dipakai, k)).toBe('Unggul di ketenangan dan internet. Kurang di harga.')
+    expect(susunAlasan({ ketenangan: 0.3, internet: 0.25, harga: 0.01, lokasi: 0.1 }, dipakai, k)).toBe('Kelebihan: ketenangan dan internet. Kekurangan: harga.')
   })
 })

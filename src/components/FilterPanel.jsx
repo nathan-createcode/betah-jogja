@@ -3,7 +3,7 @@ import {
 } from '../lib/pencarian.js'
 import { LABEL_LOKASI, LABEL_MODUL, LABEL_TIPE, rupiah } from '../lib/format.js'
 import { kelasAksen } from '../lib/teksSkor.js'
-import { Ikon } from './Ikon.jsx'
+import { Ikon, ikonFasilitas } from './Ikon.jsx'
 
 function Chip({ aktif, onClick, children }) {
   return (
@@ -16,7 +16,9 @@ function Chip({ aktif, onClick, children }) {
 function Bagian({ judul, children }) {
   return (
     <fieldset className="min-w-0">
-      <legend className="mb-2 text-[14px] font-semibold text-[var(--text-main)]">{judul}</legend>
+      <legend className="mb-3 flex items-center gap-2 text-[15px] font-semibold text-[var(--text-main)]">
+        {judul}
+      </legend>
       {children}
     </fieldset>
   )
@@ -24,7 +26,7 @@ function Bagian({ judul, children }) {
 
 function PilihModul({ modul, onGanti }) {
   return (
-    <div role="group" aria-label="Pilih jenis tempat" className="grid grid-cols-2 gap-1 rounded-[10px] bg-[var(--bg-muted)] p-1">
+    <div role="group" aria-label="Pilih jenis tempat" className="grid grid-cols-2 gap-1 rounded-full bg-[var(--bg-muted)] p-1">
       {['CW', 'LS'].map((m) => (
         <button
           key={m}
@@ -60,18 +62,21 @@ export default function FilterPanel({
 
   const checklist = (
     <Bagian judul="Wajib ada">
-      <div className="grid grid-cols-2 gap-x-3">
-        {CHECKLIST[modul].map(([butir, label]) => (
-          <label key={butir} className="flex min-h-[var(--tinggi-kontrol)] cursor-pointer items-center gap-2 text-[14px] text-[var(--text-main)]">
-            <input
-              type="checkbox"
-              checked={status.checklist.includes(butir)}
-              onChange={() => gantiCentang(butir)}
-              className="h-[18px] w-[18px] shrink-0"
-            />
-            {label}
-          </label>
-        ))}
+      <div className="grid grid-cols-1 gap-2 min-[380px]:grid-cols-2">
+        {CHECKLIST[modul].map(([butir, label]) => {
+          const IkonO = ikonFasilitas(label)
+          return (
+            <label key={butir} className="opsi">
+              <input
+                type="checkbox"
+                checked={status.checklist.includes(butir)}
+                onChange={() => gantiCentang(butir)}
+              />
+              <IkonO size={16} />
+              <span className="min-w-0">{label}</span>
+            </label>
+          )
+        })}
       </div>
     </Bagian>
   )
@@ -130,7 +135,7 @@ export default function FilterPanel({
       </Bagian>
 
       {kartu ? (
-        <details className="lipat rounded-[10px] border border-[var(--border-light)] px-3">
+        <details className="lipat rounded-2xl border border-[var(--border-light)] px-3">
           <summary className="flex min-h-11 cursor-pointer items-center justify-between text-[14px] font-semibold">
             Wajib ada
             <span className="flex items-center gap-2">

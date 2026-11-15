@@ -5,6 +5,7 @@ import { useFavorit } from '../lib/favorit.js'
 import { STATUS_AWAL, susunHasil } from '../lib/pencarian.js'
 import KartuTempat from '../components/KartuTempat.jsx'
 import { Ikon } from '../components/Ikon.jsx'
+import PolaBetah from '../components/PolaBetah.jsx'
 
 export default function Favorit() {
   const { konfigurasi, kriteria, tempat, tempatById } = useData()
@@ -34,18 +35,19 @@ export default function Favorit() {
   return (
     <div className="mx-auto max-w-3xl space-y-6 md:space-y-8">
       <div>
-        <h1 className="text-[28px] font-semibold">Favorit</h1>
+        <h1 className="text-[32px] font-semibold md:text-[44px]"><em className="sorot">Favorit</em></h1>
         <p className="mt-1 text-[14px] text-[var(--text-secondary)]">Disimpan di perangkat ini saja.</p>
       </div>
       {daftar.length === 0 ? (
-        <div className="kartu p-6 md:p-8">
-          <p className="text-[18px] font-semibold text-[var(--text-main)]">Belum ada favorit</p>
-          <p className="mt-2 max-w-md text-[16px] text-[var(--text-secondary)]">
+        <div className="bento kartu isolasi p-6 md:p-10">
+          <PolaBetah opasitas={0.05} baris={5} />
+          <p className="lapis text-[24px] font-semibold text-[var(--text-main)]">Belum ada favorit</p>
+          <p className="lapis mt-2 max-w-md text-[16px] text-[var(--text-secondary)]">
             Tekan ikon hati pada tempat yang kamu suka, lalu tempat itu muncul di sini supaya mudah kamu cari lagi.
           </p>
-          <div className="mt-5 flex flex-wrap gap-2">
-            <a href="#/kerja" className="tombol-utama gap-2"><Ikon.Kerja size={18} /> Cari tempat kerja</a>
-            <a href="#/tinggal" className="tombol-halus gap-2 !text-[16px]"><Ikon.Pintu size={18} /> Cari tempat tinggal</a>
+          <div className="lapis mt-5 flex flex-wrap gap-2">
+            <a href="#/kerja" className="tombol-modul" style={{ '--m': 'var(--working-primary)' }}><Ikon.Kerja size={18} /> Cari tempat kerja</a>
+            <a href="#/tinggal" className="tombol-modul" style={{ '--m': 'var(--living-primary)' }}><Ikon.Pintu size={18} /> Cari tempat tinggal</a>
           </div>
         </div>
       ) : (

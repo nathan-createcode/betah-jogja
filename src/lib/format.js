@@ -35,12 +35,30 @@ export const LABEL_MODUL = { CW: 'Tempat kerja', LS: 'Tempat tinggal' }
 
 export const LABEL_COLOKAN = { sedikit: 'Sedikit', cukup: 'Cukup', banyak: 'Banyak' }
 
-// Nama kriteria untuk tampilan (antarmuka berbahasa Indonesia) dan untuk kalimat alasan.
+// Konteks harga per jenis tempat, supaya angka antar tempat tidak disalahartikan.
+// Kafe dan coworking mengikuti komentar kolom `harga` di database (belanja minimum, tiket harian).
+// ASUMSI untuk tempat tinggal: harga kos per kamar; jenis lain untuk seluruh unit sewa.
+export const CATATAN_HARGA = {
+  kafe: 'Perkiraan belanja minimum',
+  coworking: 'Tiket harian',
+  kos: 'Per kamar',
+  rumah_sewa: 'Untuk seluruh rumah',
+  villa: 'Untuk seluruh vila',
+  guesthouse: 'Untuk seluruh penginapan',
+}
+
+export function catatanHarga(tempat) {
+  if (tempat.harga === 0) return null
+  return CATATAN_HARGA[tempat.tipe_tempat] ?? null
+}
+
+// Sumber tunggal nama kriteria (huruf kecil). Dipakai kalimat alasan, dan
+// diturunkan menjadi label berhuruf kapital di teksSkor.js.
 export const NAMA_KRITERIA = {
   kenyamanan_fisik: 'kenyamanan fisik',
   ketenangan: 'ketenangan',
   internet: 'internet',
-  lokasi: 'lokasi dan akses',
+  lokasi: 'lokasi dan aksesibilitas',
   harga: 'harga',
   harga_sewa: 'harga sewa',
   kualitas_perawatan: 'kualitas dan perawatan',

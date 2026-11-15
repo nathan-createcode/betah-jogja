@@ -107,9 +107,9 @@ export function susunAlasan(kontribusi, kriteriaDipakai, daftarKriteria) {
   if (diurut.length >= 3) {
     const unggul = diurut.slice(0, 2).map((x) => nama.get(x.kode))
     const kurang = nama.get(diurut.at(-1).kode)
-    return `Unggul di ${unggul[0]} dan ${unggul[1]}. Kurang di ${kurang}.`
+    return `Kelebihan: ${unggul[0]} dan ${unggul[1]}. Kekurangan: ${kurang}.`
   }
-  if (diurut.length === 2) return `Unggul di ${nama.get(diurut[0].kode)}. Kurang di ${nama.get(diurut[1].kode)}.`
+  if (diurut.length === 2) return `Kelebihan: ${nama.get(diurut[0].kode)}. Kekurangan: ${nama.get(diurut[1].kode)}.`
   return ''
 }
 
