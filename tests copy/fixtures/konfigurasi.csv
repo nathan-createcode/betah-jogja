@@ -1,0 +1,5 @@
+kunci,nilai,keterangan
+mode_anggaran,batas_keras,Anggaran bersifat batas keras: tempat dengan harga di atas anggaran tidak masuk peringkat.
+min_kandidat,2,Jumlah kandidat minimum agar persentase kecocokan dihitung.
+tampilkan_saw_pembanding,true,Tampilkan skor SAW sebagai pembanding di halaman detail.
+label_simulasi,Data simulasi,"Teks penanda yang ditampilkan di aplikasi untuk data, ulasan, dan foto simulasi."

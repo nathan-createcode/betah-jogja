@@ -1,0 +1,11 @@
+id,modul,kode,nama,tipe,skala,bobot_pembilang,bobot_penyebut,urutan
+1,CW,kenyamanan_fisik,Kenyamanan fisik,benefit,1-5,16,54,1
+2,CW,ketenangan,Ketenangan,benefit,1-5,13,54,2
+3,CW,internet,Kecepatan dan kestabilan internet,benefit,0-5,10,54,3
+4,CW,lokasi,Lokasi dan aksesibilitas,benefit,1-5,10,54,4
+5,CW,harga,Harga per kunjungan,cost,Rupiah per kunjungan,5,54,5
+6,LS,harga_sewa,Harga sewa per bulan,cost,Rupiah per bulan,4,19,1
+7,LS,internet,Kualitas internet,benefit,0-5,3,19,2
+8,LS,ketenangan,Ketenangan dan kedamaian,benefit,1-5,3,19,3
+9,LS,kualitas_perawatan,Kualitas dan perawatan,benefit,1-5,5,19,4
+10,LS,lokasi,Lokasi dan aksesibilitas,benefit,1-5,4,19,5
