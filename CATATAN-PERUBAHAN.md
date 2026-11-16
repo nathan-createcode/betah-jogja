@@ -51,5 +51,12 @@ Hanya tampilan yang diubah. Mesin hitung dan lapisan data tidak disentuh dan dic
   Yang sudah ada dan dipertahankan: `viewport-fit=cover`, area aman, input 16px, `touch-action: manipulation`, `100dvh`, hover hanya di perangkat berkursor.
 - Diperiksa tanpa overflow horizontal di lebar 393 (Samsung A55), 360, dan 320 px.
 
+## Putaran keempat: Favorit terorganisir
+- Halaman Favorit sekarang punya: tab Semua / Tempat kerja / Tempat tinggal (dengan jumlah, memakai warna modul), dropdown Urutkan
+  (Terakhir disimpan, Kecocokan tertinggi, Harga termurah, Nama A sampai Z), chip jenis (muncul saat satu kelompok dipilih dan berisi lebih dari satu jenis),
+  dan di tab Semua tiap kelompok bisa dilipat.
+- Pilihan tampilan disimpan di sessionStorage (`dss.favorit.tampilan.v1`) supaya tidak hilang saat kembali dari halaman Detail. Isi favorit tetap di `dss.favorit.v1`, tidak berubah.
+- Hanya `src/pages/Favorit.jsx` dan `src/index.css` yang berubah. Hitungan persen di Favorit memakai kode yang sama persis seperti sebelumnya.
+
 ## Catatan teknis
 - `tests/catat.test.js` ("kode sesi 6 karakter") gagal juga di ZIP asli: kode sesi menghasilkan 8 karakter. Bukan akibat redesain, tidak diubah.

@@ -484,3 +484,6 @@ button, summary, .chip, .segmen, .opsi, .tombol-utama, .tombol-halus, .tombol-mo
   .tabel-banding th, .tabel-banding td { padding: 12px; }
   .tabel-banding th[scope="row"], .tabel-banding thead th:first-child { min-width: 96px; font-size: 13px; }
 }
+
+.putar-buka { transition: transform var(--durasi) var(--ease); }
+@media (prefers-reduced-motion: reduce) { .putar-buka { transition: none; } }
