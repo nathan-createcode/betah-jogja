@@ -1,5 +1,16 @@
 # CHANGELOG
 
+## v0.2 (redesain tampilan, 16–19 November 2026)
+
+Versi paket tetap `0.2.0`. Mesin SAW-TOPSIS, bobot, aturan filter, dan isi favorit di perangkat (`dss.favorit.v1`) tidak diubah. Rincian tampilan ada di `CATATAN-PERUBAHAN.md`.
+
+- Sistem desain netral hangat. Biru hanya untuk tempat kerja, hijau hanya untuk tempat tinggal. Font: Plus Jakarta Sans, Instrument Serif (kata sorot dan kata "Jogja" lewat `src/components/Merek.jsx`), JetBrains Mono untuk label kecil. Ikon lewat `lucide-react`. Pola pengisi kartu: `src/components/PolaBetah.jsx`.
+- Animasi GSAP di `src/gerak/` untuk beranda dan kartu hasil pertama. Mati bila `prefers-reduced-motion: reduce`. Detail, Bandingkan, dan Favorit tanpa animasi masuk halaman.
+- Beranda: bagian "Area di Jogja" dihapus. Kartu newsletter diganti "Simpan yang kamu suka". Kartu "Atur bobot" diganti "Lima kriteria" (bobot tetap dari database). Pintasan jenis tempat memasang filter lewat `ubah()` yang sudah ada. Catatan "Tentang data" dipertahankan.
+- Halaman hasil: banner modul, kartu dengan peringkat "Peringkat N" di panel kecocokan, dan tata letak satu kolom di HP. Dasar sentuh: sorotan ketuk transparan, input 16px, `100dvh`, dan tabel Bandingkan yang berhenti per kolom. Diperiksa tanpa overflow horizontal di lebar 393, 360, dan 320 px.
+- Favorit: tab Semua / Tempat kerja / Tempat tinggal, urutan (terakhir disimpan, kecocokan, harga, nama), chip jenis, dan kelompok yang bisa dilipat. Pilihan tampilan di sessionStorage `dss.favorit.tampilan.v1`. Hitungan persen tidak diubah.
+- Kode sesi di footer beranda adalah 8 karakter (sejak 9 November 2026, `src/lib/catat.js`). Pada 19 November 2026 kalimat "Kode sesimu" ditebalkan. Uji `tests/catat.test.js` ("kode sesi 6 karakter") masih mengharapkan 6 karakter, jadi uji itu gagal; bukan akibat redesain.
+
 ## v0.2 (pencatatan penggunaan, 5 November 2026)
 
 Versi paket tetap `0.2.0`. Mesin SAW-TOPSIS, bobot, filter, dan penyimpanan favorit di perangkat tidak diubah.

@@ -58,5 +58,9 @@ Hanya tampilan yang diubah. Mesin hitung dan lapisan data tidak disentuh dan dic
 - Pilihan tampilan disimpan di sessionStorage (`dss.favorit.tampilan.v1`) supaya tidak hilang saat kembali dari halaman Detail. Isi favorit tetap di `dss.favorit.v1`, tidak berubah.
 - Hanya `src/pages/Favorit.jsx` dan `src/index.css` yang berubah. Hitungan persen di Favorit memakai kode yang sama persis seperti sebelumnya.
 
+## Putaran kelima: kode sesi di footer
+- 19 November 2026. Hanya `src/pages/Beranda.jsx`. Kalimat "Kode sesimu" beserta kodenya dibungkus tebal (`strong`) supaya lebih mudah dibaca di antara teks statistik anonim.
+- Isi kalimat, panjang kode (8 karakter dari `kodeSesi()`), dan pencatatan ke tabel `aktivitas` tidak berubah.
+
 ## Catatan teknis
 - `tests/catat.test.js` ("kode sesi 6 karakter") gagal juga di ZIP asli: kode sesi menghasilkan 8 karakter. Bukan akibat redesain, tidak diubah.

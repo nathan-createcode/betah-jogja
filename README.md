@@ -36,15 +36,16 @@ npm run build     # hasil build di folder dist
 **Vercel:** impor repositori, Framework Preset *Vite*, tambahkan dua variabel lingkungan di atas (Settings, Environment Variables), lalu Deploy. **Netlify:** Build command `npm run build`, Publish directory `dist`, tambahkan dua variabel yang sama. Rute memakai hash (`#/...`), jadi tidak perlu aturan pengalihan. Setelah deploy, tautan bisa dibuka dari HP.
 
 ## Ringkasan perilaku
-- Layar pertama adalah beranda. Judulnya: "Freelance di Jogja? Cari tempat kerja dan tinggal yang bikin betah."
+- Layar pertama adalah beranda. Judulnya: "Freelance di Jogja?" lalu "Cari tempat kerja dan tinggal yang bikin betah." Kata "Jogja" selalu serif italic lewat `src/components/Merek.jsx`.
+- Beranda menampilkan lima kriteria, pintasan per jenis tempat (memasang filter yang sudah ada), dan ajakan menyimpan favorit. Tidak ada kartu newsletter dan tidak ada pengaturan bobot oleh pengguna. Animasi GSAP mati bila perangkat memakai `prefers-reduced-motion: reduce`.
 - Peringkat memakai persentase kecocokan (tampilan dua desimal, koma Indonesia). Skor SAW hanya ada di panel tertutup "Cara hitungnya" pada halaman detail.
 - Skor kriteria di tampilan utama berupa label, kalimat, dan lima titik. Angka mentah seperti `3 / 5` tidak ditampilkan.
 - Filter pencarian (modul, tipe lokasi, anggaran, Wajib ada, jenis tempat) ada di halaman hasil dan bisa digulir sendiri bila lebih tinggi dari layar. Perilaku filter tidak berubah.
 - Perbandingan 2–3 tempat menampilkan data yang sama dengan halaman detail, untuk tempat kerja dan tempat tinggal.
 - Bobot, tipe, dan skala kriteria dibaca dari tabel `kriteria`; parameter perilaku dari tabel `konfigurasi`.
 - Normalisasi dihitung dari kandidat yang tersisa setelah semua filter. Kriteria yang nilainya sama di semua kandidat dibuang dan bobot sisanya dinormalkan ulang.
-- Status pencarian tiap tab disimpan di sessionStorage (hilang saat peramban ditutup). Favorit disimpan di localStorage perangkat.
+- Status pencarian tiap tab disimpan di sessionStorage (hilang saat peramban ditutup). Favorit disimpan di localStorage perangkat (`dss.favorit.v1`). Halaman Favorit bisa disaring per modul, diurutkan, dan dilipat; pilihan tampilan itu ada di sessionStorage (`dss.favorit.tampilan.v1`) dan tidak mengubah isi favorit.
 - Bila variabel Supabase kosong, aplikasi tetap terbuka dan menampilkan pesan galat. Permintaan data dibatasi 15 detik. Error saat render ditangkap batas galat (muat ulang atau kembali ke beranda).
-- Penggunaan dicatat secara anonim ke tabel `aktivitas`: satu kunjungan per sesi tab, serta tambah atau hapus favorit. Tidak ada login dan tidak ada data pribadi. Footer beranda menampilkan kode sesi enam karakter. Kegagalan mencatat tidak mengubah perilaku aplikasi.
+- Penggunaan dicatat secara anonim ke tabel `aktivitas`: satu kunjungan per sesi tab, serta tambah atau hapus favorit. Tidak ada login dan tidak ada data pribadi. Footer beranda menampilkan kode sesi delapan karakter, dalam teks tebal. Kegagalan mencatat tidak mengubah perilaku aplikasi.
 
 Pelacakan kebutuhan: `TRACE.md`. Riwayat versi: `CHANGELOG.md`.
