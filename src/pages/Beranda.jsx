@@ -276,7 +276,10 @@ export default function Beranda() {
         <div className="mt-8 border-t border-[var(--border-light)] pt-8">
           <Merek />, prototype penelitian skripsi untuk membantu freelancer memilih tempat kerja dan tempat tinggal di Yogyakarta.
           <span className="mt-2 block">
-            Situs ini mencatat statistik penggunaan secara anonim, tanpa nama, email, atau lokasi. Kode sesimu: <span className="angka font-semibold text-[var(--text-main)]">{kodeSesi()}</span>
+          Situs ini mencatat statistik penggunaan secara anonim, tanpa nama, email, atau lokasi.{' '}
+              <strong className="font-semibold text-[var(--text-main)]">
+                Kode sesimu: <span className="angka">{kodeSesi()}</span>
+              </strong>
           </span>
         </div>
       </footer>
